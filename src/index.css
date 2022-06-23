@@ -2,16 +2,78 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+/* inter font */
+@font-face {
+  font-family: 'Inter';
+  src: url('./assets/font/Inter.ttf');
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+h1 {
+  font-family: 'Inter';
+  font-size: 3rem;
+  font-weight: 700;
+  line-height: 1.2;
+  margin-bottom: 1.5rem;
+}
+
+h2 {
+  font-family: 'Inter';
+  font-size: 2.25rem;
+  font-weight: 700;
+  line-height: 1.2;
+  margin-bottom: 1rem;
+}
+
+h3 {
+  font-family: 'Inter';
+  font-size: 1.5rem;
+  font-weight: 500;
+  line-height: 1.2;
+  margin-bottom: 1rem;
+}
+
+h4 {
+  font-family: 'Inter';
+  font-size: 1.25rem;
+  font-weight: 500;
+  line-height: 1.2;
+  margin-bottom: 0.5rem;
+}
+
+p {
+  font-family: 'Inter';
+  font-size: 1.25rem;
+  line-height: 1.5;
+}
+
+a {
+  font-family: 'Inter';
+  font-size: 1.25rem;
+  line-height: 1.5;
+}
+
+button {
+  border-radius: 5px;
+  padding: 10px 24px;
+  font-family: 'Inter';
+  font-size: 1rem;
+  transition: 0.3s;
+}
+
+/* taken from https://stackoverflow.com/a/54616200 */
+.un {
+  display: inline-block;
+  padding-bottom:2px;
+  background-image: linear-gradient(#000, #000);
+  background-position: 0 100%; /*OR bottom left*/
+  background-size: 0% 2px;
+  background-repeat: no-repeat;
+  transition:
+    background-size 0.3s,
+    background-position 0s 0.3s; /*change after the size immediately*/
+}
+
+.un:hover {
+  background-position: 100% 100%; /*OR bottom right*/
+  background-size: 100% 2px;
 }
