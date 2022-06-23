@@ -1,6 +1,6 @@
 import IndustryCard from "./IndustryCard";
 
-const UseCaseCard = (props) => {
+const IndustryCarousel = (props) => {
   return (
     <div className="overflow-hidden relative">
       <div className={`${props.toRight?"animate-scrollLeft":"animate-scrollRight"} w-[200%] flex overflow-hidden my-6 hover:[animation-play-state:paused]`}>
@@ -19,4 +19,4 @@ const UseCaseCard = (props) => {
   );
 };
 
-export default UseCaseCard;
+export default IndustryCarousel;

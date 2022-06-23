@@ -1,7 +1,7 @@
 function Navbar() {
 
   return (
-    <nav className="flex bg-white bg-opacity-80 backdrop-blur-md rounded-md border-black py-4 px-6 border-2 sticky top-6 mx-[5%] justify-between z-50">
+    <nav className="flex bg-white bg-opacity-80 backdrop-blur-md rounded-md border-black py-4 px-6 border-2 sticky top-6 mx-[5%] 2xl:mx-[10%] justify-between z-50">
       <div className="flex items-center">
         <p>GeoDashboard</p>
         <p className="mx-6">|</p>

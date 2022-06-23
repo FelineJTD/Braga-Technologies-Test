@@ -74,7 +74,7 @@ function App() {
   return (
     <div>
       <Navbar />
-      <main className="pt-12 px-[5%]">
+      <main className="pt-12 px-[5%] 2xl:px-[10%]">
         <section className="min-h-screen">
           <div className="w-full lg:w-[67%] 2xl:w-[50%]">
             <p className="mb-4">Braga Geodashboard</p>
@@ -90,7 +90,7 @@ function App() {
         <section>
           <div className="w-full lg:w-[67%] 2xl:w-[50%]">
             <FadeInSection>
-              <p className="mb-4">Braga Geodashboard</p>
+              <p className="mb-4 mt-6">Braga Geodashboard</p>
               <h2>Move from seeing where <br className="hidden md:block" />to understanding why</h2>
               <p>Analyze existing site conditions, measure key urban indicators, and perform spatial analysis &mdash; directly in the browser.</p>
             </FadeInSection>
@@ -135,7 +135,7 @@ function App() {
           </FadeInSection>
         </section>
       </main>
-      <footer className="border-t-2 border-black border-opacity-25 w-full py-6 px-[5%]">
+      <footer className="border-t-2 border-black border-opacity-25 w-full pt-12 pb-6 px-[5%] 2xl:px-[10%]">
         <h2>Get started today</h2>
         <p>Find out how you can maximize the value from data and strengthen your decision making</p>
         <div className="flex justify-start my-10">
