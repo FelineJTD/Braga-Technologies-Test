@@ -1,12 +1,74 @@
-import { useState } from "react"
-import logo from './logo.svg'
+import { useEffect } from "react"
+import maplibre from "maplibre-gl";
+import "maplibre-gl/dist/maplibre-gl.css";
 import './App.css'
 import Navbar from './components/Navbar'
 import FadeInSection from "./components/FadeInSection/FadeInSection"
 import UseCaseCard from "./components/UseCaseCard"
 
 function App() {
-  const [count, setCount] = useState(0)
+  const mapCenter = {lon: 107.62799384411801, lat: -6.904165066892825};
+  // maplibre
+  useEffect(() => {
+    // initialize the map
+    const map = new maplibre.Map({
+      container: "map",
+      center: mapCenter,
+      zoom: 12,
+      scrollZoom: false,
+      style: {
+        version: 8,
+        sources: {
+          basemap: {
+            type: "raster",
+            tiles: ["	https://a.tile.openstreetmap.org/{z}/{x}/{y}.png"],
+            tileSize: 256
+          }
+        },
+        layers: [
+          {
+            id: "basemap",
+            type: "raster",
+            source: "basemap",
+            minzoom: 0,
+            maxzoom: 20
+          }
+        ]
+      }
+    });
+
+    // this is required
+    map.addControl(
+      new maplibre.AttributionControl({
+        customAttribution:
+          '<a href="https://www.openstreetmap.org/copyright">© OpenStreetMap contributors</a>'
+      })
+    );
+
+    // add controls
+
+    // fullscreen control
+    map.addControl(new maplibre.FullscreenControl(), "top-right");
+
+    // zoom in/out control; disable compass tool here (this does pitch/bearing reset on the map)
+    map.addControl(
+      new maplibre.NavigationControl({
+        showCompass: false
+      }),
+      "bottom-right"
+    );
+
+    // geolocate control; lets user find themselves with click of a button
+    map.addControl(
+      new maplibre.GeolocateControl({
+        positionOptions: {
+          enableHighAccuracy: true
+        },
+        trackUserLocation: true
+      }),
+      "bottom-right"
+    );
+  }, []);
 
   return (
     <div>
@@ -22,9 +84,7 @@ function App() {
             <button className="bg-black text-white mr-6 hover:bg-blue">Product Demo</button>
             <button className="bg-transparent border-2 border-black text-black hover:bg-blue hover:border-blue hover:text-white">Download Guidebook</button>
           </div>
-          <div>
-            Map Demo
-          </div>
+          <div id="map" className="h-[50vh] w-full rounded-md border-2 border-black border-opacity-25" />
         </section>
         <section>
           <div className="w-full lg:w-[67%] 2xl:w-[50%]">
