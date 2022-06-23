@@ -5,6 +5,7 @@ import './App.css'
 import Navbar from './components/Navbar'
 import FadeInSection from "./components/FadeInSection/FadeInSection"
 import UseCaseCard from "./components/UseCaseCard"
+import IndustryCarousel from "./components/IndustryCarousel"
 
 function App() {
   const mapCenter = {lon: 107.62799384411801, lat: -6.904165066892825};
@@ -114,19 +115,20 @@ function App() {
           </div>
         </section>
         <section>
-          <FadeInSection>
+          <FadeInSection className="my-24">
             <h4>Range of Industry</h4>
             <p>Morphocode Explorer helps planners, businesses, and cities do more with data.</p>
-            {/* carousel */}
+            <IndustryCarousel content={["Healthcare", "Transport and Logistics", "Defense", "Cities and Government", "Communication Tech", "Oil, Gas, and Mining"]} toRight={true} />
+            <IndustryCarousel content={["Engineering", "Commercial and Retail", "Tourism and Leisure", "Real Estate", "Task Force", "IoT Management"]} toRight={false} />
           </FadeInSection>
-          <FadeInSection>
+          <FadeInSection className="my-24">
             <h4>Consumer Story</h4>
             <p>Innovative partners that surface insights with Braga Technologies</p>
             <div className="flex justify-between overflow-x-scroll">
               <UseCaseCard />
             </div>
           </FadeInSection>
-          <FadeInSection className="w-full lg:w-[67%] xl:w-[50%]">
+          <FadeInSection className="w-full lg:w-[67%] xl:w-[50%] mb-24">
             <h3>
               Do your research with an urban analysis tool designed for discoveries. Use a single, powerful, interactive interface and explore location insights faster than ever.
             </h3>
