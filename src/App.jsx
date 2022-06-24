@@ -138,13 +138,13 @@ function App() {
               />
             </div>
           </FadeInSection>
-          <FadeInSection className="w-full lg:w-[67%] xl:w-[50%] mb-24">
+          <FadeInSection className="w-full lg:w-[67%] xl:w-[50%] mb-20">
             <h3>
               Do your research with an urban analysis tool designed for discoveries. Use a single, powerful, interactive interface and explore location insights faster than ever.
             </h3>
           </FadeInSection>
           <FadeInSection>
-            <div className="flex justify-start">
+            <div className="flex flex-col md:flex-row w-full justify-start pt-3 overflow-x-hidden md:overflow-x-scroll mb-24">
               <ProductCard 
                 type="2D Geodashboard" 
                 title="BIG GeoDashboard" 
