@@ -1,6 +1,9 @@
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import maplibre from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
+import ReactMapGL from "react-map-gl";
+// import mapboxgl from "mapbox-gl";
+// import "https://api.mapbox.com/mapbox-gl-js/v2.9.1/mapbox-gl.css";
 import './App.css'
 import Navbar from './components/Navbar'
 import FadeInSection from "./components/FadeInSection/FadeInSection"
@@ -10,6 +13,80 @@ import ProductCard from "./components/ProductCard";
 
 function App() {
   const mapCenter = {lon: 107.62799384411801, lat: -6.904165066892825};
+  const [satellite, setSatellite] = useState(true);
+  const toggle = () => (setSatellite(!satellite), console.log(satellite));
+
+    /*
+  This is an example snippet - you should consider tailoring it
+  to your service.
+  */
+
+  async function fetchGraphQL(operationsDoc, operationName, variables) {
+    const result = await fetch(
+      "https://sipjatan.com/hasura/v1/graphql",
+      {
+        method: "POST",
+        body: JSON.stringify({
+          query: operationsDoc,
+          variables: variables,
+          operationName: operationName
+        })
+      }
+    );
+
+    return await result.json();
+  }
+
+  const operationsDoc = `
+    query MyQuery {
+      jembatan {
+        image_url
+        lebar
+        nama_jembatan
+        panjang
+        geom
+      }
+    }
+  `;
+
+  function fetchMyQuery() {
+    return fetchGraphQL(
+      operationsDoc,
+      "MyQuery",
+      {}
+    );
+  }
+
+  async function startFetchMyQuery() {
+    const { errors, data } = await fetchMyQuery();
+
+    if (errors) {
+      // handle those errors like a pro
+      console.error(errors);
+    }
+
+    // do something great with this precious data
+    console.log(data);
+  }
+
+  startFetchMyQuery();
+  
+  const [viewport, setViewport] = useState({
+    latitude: mapCenter.lat,
+    longitude: mapCenter.lon,
+    zoom: 13,
+    width: "100%",
+    height: "100%",
+  });
+
+  // var mapboxgl = require('mapbox-gl/dist/mapbox-gl.js');
+
+  const accessToken = "pk.eyJ1IjoiZmVsaW5lanRkIiwiYSI6ImNsNHNhY2d1bjBwMWkzbWsyOWJ3cmtzZTcifQ.np-Ylk8KJXSoW0iKlPU7Mw";
+  // var map = new mapboxgl.Map({
+  //   container: 'mapbox',
+  //   style: 'mapbox://styles/mapbox/streets-v11'
+  // });
+
   // maplibre
   useEffect(() => {
     // initialize the map
@@ -18,12 +95,15 @@ function App() {
       center: mapCenter,
       zoom: 12,
       scrollZoom: false,
-      style: {
+      minZoom: 0,
+      maxZoom: 20,
+      style: 
+      {
         version: 8,
         sources: {
           basemap: {
             type: "raster",
-            tiles: ["	https://a.tile.openstreetmap.org/{z}/{x}/{y}.png"],
+            tiles: [satellite?"https://api.maptiler.com/maps/hybrid/256/{z}/{x}/{y}.jpg?key=49Mv4xVcjc0elsx4SmPM":"https://api.maptiler.com/maps/streets/256/{z}/{x}/{y}.png?key=49Mv4xVcjc0elsx4SmPM"],
             tileSize: 256
           }
         },
@@ -37,15 +117,17 @@ function App() {
           }
         ]
       }
-    });
+      
+    }, []);
+    
 
     // this is required
-    map.addControl(
-      new maplibre.AttributionControl({
-        customAttribution:
-          '<a href="https://www.openstreetmap.org/copyright">© OpenStreetMap contributors</a>'
-      })
-    );
+    // map.addControl(
+    //   new maplibre.AttributionControl({
+    //     customAttribution:
+    //       '<a href="https://www.openstreetmap.org/copyright">© OpenStreetMap contributors</a>'
+    //   })
+    // );
 
     // add controls
 
@@ -70,7 +152,8 @@ function App() {
       }),
       "bottom-right"
     );
-  }, []);
+
+  }, [satellite]);
 
   return (
     <div>
@@ -87,6 +170,9 @@ function App() {
             <button className="bg-transparent border-2 border-black text-black hover:bg-blue hover:border-blue hover:text-white">Download Guidebook</button>
           </div>
           <div id="map" className="h-[50vh] w-full rounded-md border-2 border-black border-opacity-25" />
+          <div>
+            <button onClick={toggle}>Change style</button>
+          </div>
         </section>
         <section>
           <div className="w-full lg:w-[67%] 2xl:w-[50%]">

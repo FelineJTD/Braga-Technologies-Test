@@ -5,17 +5,21 @@ specifiers:
   '@types/react-dom': ^18.0.0
   '@vitejs/plugin-react': ^1.3.0
   autoprefixer: ^10.4.7
+  mapbox-gl: ^2.9.1
   maplibre-gl: ^2.1.9
   postcss: ^8.4.14
   react: ^18.0.0
   react-dom: ^18.0.0
+  react-map-gl: ^7.0.16
   tailwindcss: ^3.1.4
   vite: ^2.9.9
 
 dependencies:
+  mapbox-gl: 2.9.1
   maplibre-gl: 2.1.9
   react: 18.2.0
   react-dom: 18.2.0_react@18.2.0
+  react-map-gl: 7.0.16_bauxlsvvy7hbbifsyt3jz3gu5i
 
 devDependencies:
   '@types/react': 18.0.14
@@ -335,6 +339,10 @@ packages:
       minimist: 1.2.6
     dev: false
 
+  /@mapbox/geojson-types/1.0.2:
+    resolution: {integrity: sha512-e9EBqHHv3EORHrSfbR9DqecPNn+AmuAoQxV6aL8Xu30bJMJR1o8PZLZzpk1Wq7/NfCbuhmakHTPYRhoqLsXRnw==}
+    dev: false
+
   /@mapbox/jsonlint-lines-primitives/2.0.2:
     resolution: {integrity: sha512-rY0o9A5ECsTQRVhv7tL/OyDpGAoUB4tTvLiW1DSzQGq4bvTPhNw1VpSNjDJc5GFZ2XuyOtSWSVN05qOtcD71qQ==}
     engines: {node: '>= 0.6'}
@@ -350,6 +358,10 @@ packages:
 
   /@mapbox/tiny-sdf/2.0.5:
     resolution: {integrity: sha512-OhXt2lS//WpLdkqrzo/KwB7SRD8AiNTFFzuo9n14IBupzIMa67yGItcK7I2W9D8Ghpa4T04Sw9FWsKCJG50Bxw==}
+    dev: false
+
+  /@mapbox/unitbezier/0.0.0:
+    resolution: {integrity: sha512-HPnRdYO0WjFjRTSwO3frz1wKaU649OBFPX3Zo/2WZvuRi6zMiRGui8SnPQiQABgqCf8YikDe5t3HViTVw1WUzA==}
     dev: false
 
   /@mapbox/unitbezier/0.0.1:
@@ -398,6 +410,12 @@ packages:
 
   /@types/geojson/7946.0.8:
     resolution: {integrity: sha512-1rkryxURpr6aWP7R786/UQOkJ3PcpQiWkAXBmdWc7ryFWqN6a4xfK7BtjXvFBKO9LjQ+MWQSWxYeZX1OApnArA==}
+    dev: false
+
+  /@types/mapbox-gl/2.7.3:
+    resolution: {integrity: sha512-XdveeJptNNZw7ZoeiAJ2/dupNtWaV6qpBG/SOFEpQNQAc+oiO6qUznX85n+W1XbLeD8SVRVfVORKuR+I4CHDZw==}
+    dependencies:
+      '@types/geojson': 7946.0.8
     dev: false
 
   /@types/mapbox__point-geometry/0.1.2:
@@ -939,6 +957,10 @@ packages:
     engines: {node: '>=4'}
     dev: true
 
+  /grid-index/1.1.0:
+    resolution: {integrity: sha512-HZRwumpOGUrHyxO5bqKZL0B0GlUpwtCAzZ42sgxUPniu33R1LSFH5yrIcBCHjkctCAh3mtWKcKd9J4vDDdeVHA==}
+    dev: false
+
   /has-flag/3.0.0:
     resolution: {integrity: sha512-sKJf1+ceQBr4SMkvQnBDNDtf4TXpVhVGateu0t918bl30FnbE2m4vNLX+VWe/dpjlb+HugGYzW7uQXH98HPEYw==}
     engines: {node: '>=4'}
@@ -1014,6 +1036,33 @@ packages:
     hasBin: true
     dependencies:
       js-tokens: 4.0.0
+    dev: false
+
+  /mapbox-gl/2.9.1:
+    resolution: {integrity: sha512-PWEyI0FUeWaCbDnKmzHBi6CIB264SG6O894PJL1q4Cz/ZiHNyAROonCD48bxVWSQnXXAEDPyhJS5MiJ2K5DTjw==}
+    dependencies:
+      '@mapbox/geojson-rewind': 0.5.2
+      '@mapbox/geojson-types': 1.0.2
+      '@mapbox/jsonlint-lines-primitives': 2.0.2
+      '@mapbox/mapbox-gl-supported': 2.0.1
+      '@mapbox/point-geometry': 0.1.0
+      '@mapbox/tiny-sdf': 2.0.5
+      '@mapbox/unitbezier': 0.0.0
+      '@mapbox/vector-tile': 1.3.1
+      '@mapbox/whoots-js': 3.1.0
+      csscolorparser: 1.0.3
+      earcut: 2.2.3
+      geojson-vt: 3.2.1
+      gl-matrix: 3.4.3
+      grid-index: 1.1.0
+      murmurhash-js: 1.0.0
+      pbf: 3.2.1
+      potpack: 1.0.2
+      quickselect: 2.0.0
+      rw: 1.3.3
+      supercluster: 7.1.5
+      tinyqueue: 2.0.3
+      vt-pbf: 3.1.3
     dev: false
 
   /maplibre-gl/2.1.9:
@@ -1221,6 +1270,17 @@ packages:
       scheduler: 0.23.0
     dev: false
 
+  /react-map-gl/7.0.16_bauxlsvvy7hbbifsyt3jz3gu5i:
+    resolution: {integrity: sha512-H8dTm4a09D+eI6PSl/hXMTA+vfoPXnfOKjQRxqzY4q1tSt/r3jqTRrb0CwVTi2sAvUJOrDsNCMQCKiEFYQ89eg==}
+    peerDependencies:
+      mapbox-gl: '*'
+      react: '>=16.3.0'
+    dependencies:
+      '@types/mapbox-gl': 2.7.3
+      mapbox-gl: 2.9.1
+      react: 18.2.0
+    dev: false
+
   /react-refresh/0.13.0:
     resolution: {integrity: sha512-XP8A9BT0CpRBD+NYLLeIhld/RqG9+gktUjW1FkE+Vm7OCinbG1SshcK5tb9ls4kzvjZr9mOQc7HYgBngEyPAXg==}
     engines: {node: '>=0.10.0'}
@@ -1279,6 +1339,10 @@ packages:
     dependencies:
       queue-microtask: 1.2.3
     dev: true
+
+  /rw/1.3.3:
+    resolution: {integrity: sha512-PdhdWy89SiZogBLaw42zdeqtRJ//zFd2PgQavcICDUgJT5oW10QCRKbJ6bg4r0/UY2M6BWd5tkxuGFRvCkgfHQ==}
+    dev: false
 
   /safe-buffer/5.1.2:
     resolution: {integrity: sha512-Gd2UZBJDkXlY7GbJxfsE8/nvKkUEU1G38c1siN6QP6a9PT9MmHB8GnpscSmMJSoF8LOIrt8ud/wPtojys4G6+g==}
