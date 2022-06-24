@@ -6,6 +6,7 @@ import Navbar from './components/Navbar'
 import FadeInSection from "./components/FadeInSection/FadeInSection"
 import UseCaseCard from "./components/UseCaseCard"
 import IndustryCarousel from "./components/IndustryCarousel"
+import ProductCard from "./components/ProductCard";
 
 function App() {
   const mapCenter = {lon: 107.62799384411801, lat: -6.904165066892825};
@@ -124,14 +125,37 @@ function App() {
           <FadeInSection className="my-24">
             <h4>Consumer Story</h4>
             <p>Innovative partners that surface insights with Braga Technologies</p>
-            <div className="flex justify-between overflow-x-scroll">
-              <UseCaseCard />
+            <div className="flex overflow-x-scroll">
+              <UseCaseCard 
+                no={1} 
+                title="Accelerating Agricultural Sustainability" 
+                desc="Disbun relies on Braga to turn complex geospatial information on agricultural trends into insights, supporting its mission to help farmers sustainably feed the planet." 
+              />
+              <UseCaseCard 
+                no={2} 
+                title="Mitigation Plan to Save Lives" 
+                desc="Disbun relies on Braga to turn complex geospatial information on agricultural trends into insights, supporting its mission to help farmers sustainably feed the planet." 
+              />
             </div>
           </FadeInSection>
           <FadeInSection className="w-full lg:w-[67%] xl:w-[50%] mb-24">
             <h3>
               Do your research with an urban analysis tool designed for discoveries. Use a single, powerful, interactive interface and explore location insights faster than ever.
             </h3>
+          </FadeInSection>
+          <FadeInSection>
+            <div className="flex justify-start">
+              <ProductCard 
+                type="2D Geodashboard" 
+                title="BIG GeoDashboard" 
+                desc="Designed for task force management and POI data collection" 
+              />
+              <ProductCard 
+                type="2D Geodashboard" 
+                title="Disbun" 
+                desc="Designed for task force management and POI data collection" 
+              />
+            </div>
           </FadeInSection>
         </section>
       </main>
