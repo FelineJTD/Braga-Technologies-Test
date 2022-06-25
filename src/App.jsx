@@ -228,8 +228,8 @@ function App() {
   return (
     <div>
       <Navbar />
-      <main className="pt-12 px-[5%] 2xl:px-[10%]">
-        <section className="min-h-screen">
+      <main className="pt-12">
+        <section className="min-h-screen px-[5%] 2xl:px-[10%]">
           <div className="w-full lg:w-[67%] 2xl:w-[50%]">
             {/* <img src="../src/assets/images/braga-logo.svg" alt="" className="absolute -right-96 -top-96 w-[60rem] opacity-25 animate-spin" /> */}
             <p className="mb-4">Braga Geodashboard</p>
@@ -247,7 +247,7 @@ function App() {
             ))}
           </div>
         </section>
-        <section>
+        <section className="px-[5%] 2xl:px-[10%]">
           <div className="w-full lg:w-[67%] 2xl:w-[50%]">
             <FadeInSection>
               <p className="mb-4 mt-6">Braga Geodashboard</p>
@@ -275,28 +275,33 @@ function App() {
           </div>
         </section>
         <section>
-          <FadeInSection className="my-24">
+          <FadeInSection className="py-12 px-[5%] 2xl:px-[10%] bg-black bg-opacity-10">
             <h4>Range of Industry</h4>
             <p>Morphocode Explorer helps planners, businesses, and cities do more with data.</p>
             <IndustryCarousel content={industryContentTop} icons={industryImageTop} toRight={true} />
             <IndustryCarousel content={industryContentBottom} icons={industryImageBottom} toRight={false} />
           </FadeInSection>
-          <FadeInSection className="my-24">
-            <h4>Consumer Story</h4>
-            <p>Innovative partners that surface insights with Braga Technologies</p>
-            <div className="flex overflow-x-scroll">
-              <UseCaseCard 
-                no={1} 
-                title="Accelerating Agricultural Sustainability" 
-                desc="Disbun relies on Braga to turn complex geospatial information on agricultural trends into insights, supporting its mission to help farmers sustainably feed the planet." 
-              />
-              <UseCaseCard 
-                no={2} 
-                title="Mitigation Plan to Save Lives" 
-                desc="Disbun relies on Braga to turn complex geospatial information on agricultural trends into insights, supporting its mission to help farmers sustainably feed the planet." 
-              />
-            </div>
-          </FadeInSection>
+          <div className="bg-blue py-12">
+            <FadeInSection className="px-[5%] 2xl:px-[10%] text-white">
+              <h2>Consumer Story</h2>
+              <p>Innovative partners that surface insights with Braga Technologies</p>
+              <div className="flex overflow-x-scroll">
+                <UseCaseCard 
+                  no={1} 
+                  title="Accelerating Agricultural Sustainability" 
+                  desc="Disbun relies on Braga to turn complex geospatial information on agricultural trends into insights, supporting its mission to help farmers sustainably feed the planet." 
+                />
+                <UseCaseCard 
+                  no={2} 
+                  title="Mitigation Plan to Save Lives" 
+                  desc="Disbun relies on Braga to turn complex geospatial information on agricultural trends into insights, supporting its mission to help farmers sustainably feed the planet." 
+                />
+              </div>
+            </FadeInSection>
+          </div>
+        </section>
+
+        <section className="px-[5%] 2xl:px-[10%] mt-24">
           <FadeInSection className="w-full lg:w-[67%] xl:w-[50%] mb-20">
             <h3>
               Do your research with an urban analysis tool designed for discoveries. Use a single, powerful, interactive interface and explore location insights faster than ever.

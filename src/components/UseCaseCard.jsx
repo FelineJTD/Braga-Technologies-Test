@@ -1,6 +1,6 @@
 const UseCaseCard = (props) => {
   return (
-    <div className="border-2 border-black border-opacity-25 rounded-md p-3 min-w-[50rem] my-6 mr-12">
+    <div className="border-2 border-black border-opacity-25 rounded-md p-6 min-w-[40rem] my-6 mr-12 bg-white bg-opacity-75 text-black">
       <p>Use Case {props.no}</p>
       <h2 className="opacity-75 mt-3">{props.title}</h2>
       <p>{props.desc}</p>
