@@ -1,9 +1,6 @@
 import { useEffect, useState } from "react"
 import maplibre from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
-import ReactMapGL from "react-map-gl";
-// import mapboxgl from "mapbox-gl";
-// import "https://api.mapbox.com/mapbox-gl-js/v2.9.1/mapbox-gl.css";
 import './App.css'
 import Navbar from './components/Navbar'
 import FadeInSection from "./components/FadeInSection/FadeInSection"
@@ -13,10 +10,8 @@ import ProductCard from "./components/ProductCard";
 
 function App() {
   const mapCenter = {lon: 107.62799384411801, lat: -6.904165066892825};
-  const [satellite, setSatellite] = useState(true);
-  const toggle = () => (setSatellite(!satellite), console.log(satellite));
 
-    /*
+  /*
   This is an example snippet - you should consider tailoring it
   to your service.
   */
@@ -70,22 +65,6 @@ function App() {
   }
 
   startFetchMyQuery();
-  
-  const [viewport, setViewport] = useState({
-    latitude: mapCenter.lat,
-    longitude: mapCenter.lon,
-    zoom: 13,
-    width: "100%",
-    height: "100%",
-  });
-
-  // var mapboxgl = require('mapbox-gl/dist/mapbox-gl.js');
-
-  const accessToken = "pk.eyJ1IjoiZmVsaW5lanRkIiwiYSI6ImNsNHNhY2d1bjBwMWkzbWsyOWJ3cmtzZTcifQ.np-Ylk8KJXSoW0iKlPU7Mw";
-  // var map = new mapboxgl.Map({
-  //   container: 'mapbox',
-  //   style: 'mapbox://styles/mapbox/streets-v11'
-  // });
 
   // maplibre
   useEffect(() => {
@@ -103,7 +82,7 @@ function App() {
         sources: {
           basemap: {
             type: "raster",
-            tiles: [satellite?"https://api.maptiler.com/maps/hybrid/256/{z}/{x}/{y}.jpg?key=49Mv4xVcjc0elsx4SmPM":"https://api.maptiler.com/maps/streets/256/{z}/{x}/{y}.png?key=49Mv4xVcjc0elsx4SmPM"],
+            tiles: ["https://api.maptiler.com/maps/hybrid/256/{z}/{x}/{y}.jpg?key=49Mv4xVcjc0elsx4SmPM"],
             tileSize: 256
           }
         },
@@ -153,7 +132,79 @@ function App() {
       "bottom-right"
     );
 
-  }, [satellite]);
+    // Control implemented as ES6 class
+    class StylesControl {
+      onAdd(map) {
+        this._map = map;
+        this._satellite = document.createElement("button");
+        this._satellite.className = "satellite";
+        this._satellite.textContent = "Satellite";
+        this._satellite.addEventListener("click", () => {
+          this._map.setStyle(
+            {
+              version: 8,
+              sources: {
+                basemap: {
+                  type: "raster",
+                  tiles: ["https://api.maptiler.com/maps/hybrid/256/{z}/{x}/{y}.jpg?key=49Mv4xVcjc0elsx4SmPM"],
+                  tileSize: 256
+                }
+              },
+              layers: [
+                {
+                  id: "basemap",
+                  type: "raster",
+                  source: "basemap",
+                  minzoom: 0,
+                  maxzoom: 20
+                }
+              ]
+            }
+          );
+        });
+        this._roadmap = document.createElement("button");
+        this._roadmap.className = "roadmap";
+        this._roadmap.textContent = "Roadmap";
+        this._roadmap.addEventListener("click", () => {
+          this._map.setStyle(
+            {
+              version: 8,
+              sources: {
+                basemap: {
+                  type: "raster",
+                  tiles: ["https://api.maptiler.com/maps/streets/256/{z}/{x}/{y}.png?key=49Mv4xVcjc0elsx4SmPM"],
+                  tileSize: 256
+                }
+              },
+              layers: [
+                {
+                  id: "basemap",
+                  type: "raster",
+                  source: "basemap",
+                  minzoom: 0,
+                  maxzoom: 20
+                }
+              ]
+            }
+          );
+        });
+        this._container = document.createElement('div');
+        this._container.className = 'mapboxgl-ctrl bg-white rounded-md border-black border-[1px]';
+        this._container.appendChild(this._satellite);
+        this._container.appendChild(this._roadmap);
+        return this._container;
+      }
+
+      onRemove() {
+        this._container.parentNode.removeChild(this._container);
+        this._map = undefined;
+      }
+    }
+
+    // add control to map
+    map.addControl(new StylesControl(), "bottom-left");
+
+  }, []);
 
   return (
     <div>
@@ -170,9 +221,6 @@ function App() {
             <button className="bg-transparent border-2 border-black text-black hover:bg-blue hover:border-blue hover:text-white">Download Guidebook</button>
           </div>
           <div id="map" className="h-[50vh] w-full rounded-md border-2 border-black border-opacity-25" />
-          <div>
-            <button onClick={toggle}>Change style</button>
-          </div>
         </section>
         <section>
           <div className="w-full lg:w-[67%] 2xl:w-[50%]">
@@ -230,7 +278,7 @@ function App() {
             </h3>
           </FadeInSection>
           <FadeInSection>
-            <div className="flex flex-col md:flex-row w-full justify-start pt-3 overflow-x-hidden md:overflow-x-scroll mb-24">
+            <div className="flex flex-col md:flex-row w-full justify-start pt-3 overflow-x-hidden md:overflow-x-auto mb-24">
               <ProductCard 
                 type="2D Geodashboard" 
                 title="BIG GeoDashboard" 
