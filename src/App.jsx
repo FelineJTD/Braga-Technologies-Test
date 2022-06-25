@@ -93,7 +93,7 @@ function App() {
     map = new maplibre.Map({
       container: "map",
       center: mapCenter,
-      zoom: 5,
+      zoom: 10,
       scrollZoom: false,
       minZoom: 0,
       maxZoom: 20,
