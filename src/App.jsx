@@ -232,6 +232,8 @@ function App() {
         <section className="min-h-screen px-[5%] 2xl:px-[10%]">
           <div className="w-full lg:w-[67%] 2xl:w-[50%]">
             {/* <img src="../src/assets/images/braga-logo.svg" alt="" className="absolute -right-96 -top-96 w-[60rem] opacity-25 animate-spin" /> */}
+            <div className="w-[45vw] h-[45vw] bg-blue opacity-10 rounded-full absolute blur-2xl -top-[15vw] -right-[10vw]"/>
+            <div className="w-[25vw] h-[25vw] bg-blue opacity-10 rounded-full absolute blur-2xl top-[15vw] -left-[10vw]"/>
             <p className="mb-4">Braga Geodashboard</p>
             <h1>Explore the city <br className="hidden md:block" />on a human scale</h1>
             <p>Analyze existing site conditions, measure key urban indicators, and perform spatial analysis &mdash; directly in the browser.</p>
@@ -281,8 +283,8 @@ function App() {
             <IndustryCarousel content={industryContentTop} icons={industryImageTop} toRight={true} />
             <IndustryCarousel content={industryContentBottom} icons={industryImageBottom} toRight={false} />
           </FadeInSection>
-          <div className="bg-blue py-12">
-            <FadeInSection className="px-[5%] 2xl:px-[10%] text-white">
+          <div className="py-24">
+            <FadeInSection className="px-[5%] 2xl:px-[10%]">
               <h2>Consumer Story</h2>
               <p>Innovative partners that surface insights with Braga Technologies</p>
               <div className="flex overflow-x-scroll">
@@ -301,14 +303,14 @@ function App() {
           </div>
         </section>
 
-        <section className="px-[5%] 2xl:px-[10%] mt-24">
-          <FadeInSection className="w-full lg:w-[67%] xl:w-[50%] mb-20">
+        <section className="px-[5%] 2xl:px-[10%] pt-24 bg-black bg-opacity-10">
+          <FadeInSection className="w-full lg:w-[67%] xl:w-[50%] pb-20">
             <h3>
               Do your research with an urban analysis tool designed for discoveries. Use a single, powerful, interactive interface and explore location insights faster than ever.
             </h3>
           </FadeInSection>
           <FadeInSection>
-            <div className="flex flex-col md:flex-row w-full justify-start pt-3 overflow-x-hidden md:overflow-x-auto mb-24">
+            <div className="flex flex-col md:flex-row w-full justify-start pt-3 overflow-x-hidden md:overflow-x-auto pb-24">
               <ProductCard 
                 type="2D Geodashboard" 
                 title="BIG GeoDashboard" 
@@ -323,7 +325,7 @@ function App() {
           </FadeInSection>
         </section>
       </main>
-      <footer className="border-t-2 border-black border-opacity-25 w-full pt-12 pb-6 px-[5%] 2xl:px-[10%]">
+      <footer className="border-t-2 border-black border-opacity-25 w-full pt-12 pb-6 px-[5%] 2xl:px-[10%] bg-white">
         <h2>Get started today</h2>
         <p>Find out how you can maximize the value from data and strengthen your decision making</p>
         <div className="flex justify-start my-10">
