@@ -250,7 +250,7 @@ function App() {
             ))}
           </div>
         </section>
-        <section className="px-[5%] 2xl:px-[10%] pt-12 pb-12">
+        <section className="flex px-[5%] 2xl:px-[10%] pt-12 pb-12">
           <div className="w-full lg:w-[67%] 2xl:w-[50%]">
             <FadeInSection>
               <p className="mb-4 mt-6">Braga Geodashboard</p>
@@ -276,6 +276,12 @@ function App() {
               <p>Empower anyone in your org to conduct, engage with, and be inspired by user insights.</p>
             </FadeInSection>
           </div>
+          <aside className="ml-24 py-10 hidden lg:block w-[33%] 2xl:w-1/2">
+            <video preload autoplay muted loop className="w-full h-full object-cover rounded-xl"> 
+             <source src="https://assets.mixkit.co/videos/download/mixkit-modern-house-on-the-beach-27543-medium.mp4" type="video/mp4" />
+             Your browser does not support the video tag.
+            </video>
+          </aside>
         </section>
         <section>
           <FadeInSection className="py-12 px-[5%] 2xl:px-[10%] bg-black bg-opacity-10">
