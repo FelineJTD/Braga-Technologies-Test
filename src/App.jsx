@@ -8,6 +8,10 @@ import UseCaseCard from "./components/UseCaseCard"
 import IndustryCarousel from "./components/IndustryCarousel"
 import ProductCard from "./components/ProductCard";
 
+import logo1 from "./assets/images/partner-logos/logo1.svg";
+import logo2 from "./assets/images/partner-logos/logo2.svg";
+import logo3 from "./assets/images/partner-logos/logo3.svg";
+
 import { loadAnimation } from "lottie-web";
 import { defineLordIconElement } from "lord-icon-element";
 
@@ -16,8 +20,7 @@ defineLordIconElement(loadAnimation);
 
 function App() {
   const mapCenter = {lon: 107.62799384411801, lat: -6.904165066892825};
-  const pathToPartnerLogos = "../src/assets/images/partner-logos/";
-  const partnerLogos = ["logo1.svg", "logo2.svg", "logo3.svg", "logo1.svg", "logo3.svg"];
+  const partnerLogos = [logo1, logo2, logo3, logo1, logo3];
 
   const pathToProductImages = "../src/assets/images/products-photos/";
   const productImages = ["product1.jpg", "product2.jpg", "product3.jpg", "product4.jpg"];
@@ -240,7 +243,7 @@ function App() {
           <div id="map" className="h-[50vh] w-full rounded-md border-2 border-black border-opacity-25" />
           <div className="flex justify-start items-center mt-3 mb-24">
             { partnerLogos.map((logo, index) => (
-              <img key={index} src={pathToPartnerLogos + logo} alt={logo} className="h-full mr-6" />
+              <img key={index} src={logo} alt={logo} className="h-full mr-6" />
             ))}
           </div>
         </section>
