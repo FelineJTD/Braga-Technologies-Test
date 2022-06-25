@@ -316,11 +316,13 @@ function App() {
                 type="2D Geodashboard" 
                 title="BIG GeoDashboard" 
                 desc="Designed for task force management and POI data collection" 
+                image="https://wp.technologyreview.com/wp-content/uploads/2019/01/mapillary-2-12.jpg"
               />
               <ProductCard 
                 type="2D Geodashboard" 
                 title="Disbun" 
                 desc="Designed for task force management and POI data collection" 
+                image="https://www.toronto.ca/wp-content/uploads/2017/10/9680-tomaps-870x338.png"
               />
             </div>
           </FadeInSection>
