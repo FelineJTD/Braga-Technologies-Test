@@ -21,6 +21,7 @@ import { defineLordIconElement } from "lord-icon-element";
 defineLordIconElement(loadAnimation);
 
 function App() {
+  const [data, setData] = useState(null);
   const mapCenter = {lon: 107.62799384411801, lat: -6.904165066892825};
   const partnerLogos = [logo1, logo2, logo3, logo1, logo3];
 
@@ -56,10 +57,6 @@ function App() {
   const operationsDoc = `
     query MyQuery {
       jembatan {
-        image_url
-        lebar
-        nama_jembatan
-        panjang
         geom
       }
     }
@@ -73,6 +70,7 @@ function App() {
     );
   }
 
+
   async function startFetchMyQuery() {
     const { errors, data } = await fetchMyQuery();
 
@@ -82,18 +80,69 @@ function App() {
     }
 
     // do something great with this precious data
-    console.log(data);
+    return data;
   }
 
-  startFetchMyQuery();
+
+  /** @type {maplibre.Map} */ let map;
+  useEffect(() => {
+    console.log(map);
+    console.log(data);
+    if (!map || !data) return;
+    
+
+    // code here
+    let dataJembatan = data.jembatan;
+    dataJembatan = dataJembatan.map(item => {
+      return {
+        type: "Feature",
+        geometry: {
+          type: item.geom.type,
+          coordinates: item.geom.coordinates,
+        }
+      }
+    });
+    console.log(dataJembatan);
+  }, [data, map]);
 
   // maplibre
   useEffect(() => {
     // initialize the map
-    const map = new maplibre.Map({
+    
+
+    // {
+    //   type: "FeatureCollection",
+    //   features: [
+    //     ...Array(10)
+    //       .fill(0)
+    //       .map((_x, i) => ({
+    //         // feature for Mapbox DC
+    //         type: "Feature",
+    //         geometry: {
+    //           type: "Point",
+    //           // coordinates: 
+    //           // data["jembatan"][i]["geom"]["coordinates"]
+    //           // type: "Point",
+    //           // randomly generated test data using Denver's long, lat
+    //           // and then adding some positive and negative offsets
+    //           // to randomize the location of points on the map
+    //           coordinates: [ 
+    //             107.62799384411801,
+    //             -6.904165066892825
+                
+    //           ]
+    //         },
+    //         properties: {
+    //           customersReached: Math.round(999 * Math.random())
+    //         }
+    //       }))
+    //   ]
+    // }
+
+    map = new maplibre.Map({
       container: "map",
       center: mapCenter,
-      zoom: 12,
+      zoom: 5,
       scrollZoom: false,
       minZoom: 0,
       maxZoom: 20,
@@ -120,6 +169,7 @@ function App() {
       
     }, []);
     
+    startFetchMyQuery().then(data => { setData(data) });
 
     // this is required
     // map.addControl(
@@ -252,24 +302,28 @@ function App() {
           // add data to the layer
           // this should be obtained from the API server
           type: "geojson",
-          data: {
+          data: 
+          {
             type: "FeatureCollection",
             features: [
-              ...Array(10)
+              ...Array(262)
                 .fill(0)
                 .map((_x, i) => ({
                   // feature for Mapbox DC
                   type: "Feature",
                   geometry: {
                     type: "Point",
+                    coordinates: 
+                    data["jembatan"][i]["geom"]["coordinates"]
+                    // type: "Point",
                     // randomly generated test data using Denver's long, lat
                     // and then adding some positive and negative offsets
                     // to randomize the location of points on the map
-                    coordinates: [ 
-                      107.62799384411801,
-                      -6.904165066892825
+                    // coordinates: [ 
+                    //   107.62799384411801,
+                    //   -6.904165066892825
                       
-                    ]
+                    // ]
                   },
                   properties: {
                     customersReached: Math.round(999 * Math.random())
