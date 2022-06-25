@@ -286,7 +286,7 @@ function App() {
             </FadeInSection>
           </div>
           <aside className="ml-24 py-10 hidden lg:block w-[33%] 2xl:w-1/2">
-            <video autoPlay muted loop playsInline className="w-full h-full object-cover rounded-xl"> 
+            <video preload="metadata" autoPlay muted loop playsInline className="w-full h-full object-cover rounded-xl"> 
              <source src="https://assets.mixkit.co/videos/download/mixkit-modern-house-on-the-beach-27543-medium.mp4" type="video/mp4" />
              Your browser does not support the video tag.
             </video>
