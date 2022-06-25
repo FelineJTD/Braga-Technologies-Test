@@ -294,7 +294,7 @@ function App() {
             <FadeInSection className="px-[5%] 2xl:px-[10%]">
               <h2>Consumer Story</h2>
               <p>Innovative partners that surface insights with Braga Technologies</p>
-              <div className="flex overflow-x-scroll">
+              <div className="flex overflow-x-auto">
                 <UseCaseCard 
                   no={1} 
                   title="Accelerating Agricultural Sustainability" 
