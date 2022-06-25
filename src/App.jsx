@@ -250,7 +250,7 @@ function App() {
             ))}
           </div>
         </section>
-        <section className="px-[5%] 2xl:px-[10%] pt-12">
+        <section className="px-[5%] 2xl:px-[10%] pt-12 pb-12">
           <div className="w-full lg:w-[67%] 2xl:w-[50%]">
             <FadeInSection>
               <p className="mb-4 mt-6">Braga Geodashboard</p>
@@ -279,7 +279,7 @@ function App() {
         </section>
         <section>
           <FadeInSection className="py-12 px-[5%] 2xl:px-[10%] bg-black bg-opacity-10">
-            <h4>Range of Industry</h4>
+            <h2>Range of Industry</h2>
             <p>Morphocode Explorer helps planners, businesses, and cities do more with data.</p>
             <IndustryCarousel content={industryContentTop} icons={industryImageTop} toRight={true} />
             <IndustryCarousel content={industryContentBottom} icons={industryImageBottom} toRight={false} />
