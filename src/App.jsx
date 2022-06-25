@@ -156,9 +156,14 @@ function App() {
       onAdd(map) {
         this._map = map;
         this._satellite = document.createElement("button");
-        this._satellite.className = "satellite";
+        this._satellite.className = "bg-[#AAA] font-bold";
+        this._satellite.disabled = true;
         this._satellite.textContent = "Satellite";
         this._satellite.addEventListener("click", () => {
+          this._satellite.className = "bg-[#AAA] font-bold";
+          this._roadmap.className = "satellite";
+          this._satellite.disabled = true;
+          this._roadmap.disabled = false;
           this._map.setStyle(
             {
               version: 8,
@@ -185,6 +190,10 @@ function App() {
         this._roadmap.className = "roadmap";
         this._roadmap.textContent = "Roadmap";
         this._roadmap.addEventListener("click", () => {
+          this._roadmap.className = "bg-[#DDD] font-bold";
+          this._satellite.className = "satellite";
+          this._roadmap.disabled = true;
+          this._satellite.disabled = false;
           this._map.setStyle(
             {
               version: 8,
