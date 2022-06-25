@@ -70,7 +70,6 @@ function App() {
     );
   }
 
-
   async function startFetchMyQuery() {
     const { errors, data } = await fetchMyQuery();
 
@@ -85,59 +84,11 @@ function App() {
 
 
   /** @type {maplibre.Map} */ let map;
-  useEffect(() => {
-    console.log(map);
-    console.log(data);
-    if (!map || !data) return;
-    
-
-    // code here
-    let dataJembatan = data.jembatan;
-    dataJembatan = dataJembatan.map(item => {
-      return {
-        type: "Feature",
-        geometry: {
-          type: item.geom.type,
-          coordinates: item.geom.coordinates,
-        }
-      }
-    });
-    console.log(dataJembatan);
-  }, [data, map]);
 
   // maplibre
   useEffect(() => {
+    startFetchMyQuery().then(setData(data));
     // initialize the map
-    
-
-    // {
-    //   type: "FeatureCollection",
-    //   features: [
-    //     ...Array(10)
-    //       .fill(0)
-    //       .map((_x, i) => ({
-    //         // feature for Mapbox DC
-    //         type: "Feature",
-    //         geometry: {
-    //           type: "Point",
-    //           // coordinates: 
-    //           // data["jembatan"][i]["geom"]["coordinates"]
-    //           // type: "Point",
-    //           // randomly generated test data using Denver's long, lat
-    //           // and then adding some positive and negative offsets
-    //           // to randomize the location of points on the map
-    //           coordinates: [ 
-    //             107.62799384411801,
-    //             -6.904165066892825
-                
-    //           ]
-    //         },
-    //         properties: {
-    //           customersReached: Math.round(999 * Math.random())
-    //         }
-    //       }))
-    //   ]
-    // }
 
     map = new maplibre.Map({
       container: "map",
@@ -168,8 +119,6 @@ function App() {
       }
       
     }, []);
-    
-    startFetchMyQuery().then(data => { setData(data) });
 
     // this is required
     // map.addControl(
@@ -367,6 +316,26 @@ function App() {
     });
 
   }, []);
+
+  useEffect(() => {
+    console.log(map);
+    console.log(data);
+    if (!map || !data) return;
+    
+
+    // code here
+    let dataJembatan = data.jembatan;
+    dataJembatan = dataJembatan.map(item => {
+      return {
+        type: "Feature",
+        geometry: {
+          type: item.geom.type,
+          coordinates: item.geom.coordinates,
+        }
+      }
+    });
+    console.log(dataJembatan);
+  }, [data, map]);
 
   return (
     <div>
