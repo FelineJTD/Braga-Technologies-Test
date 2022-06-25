@@ -87,7 +87,9 @@ function App() {
 
   // maplibre
   useEffect(() => {
-    startFetchMyQuery().then(setData(data));
+    startFetchMyQuery().then(setData);
+    // expands to
+    // startFetchMyQuery().then((d) => setData(d));
     // initialize the map
 
     map = new maplibre.Map({
@@ -235,6 +237,30 @@ function App() {
 
     // wait for the map to init and load
     // start adding data only after this
+    
+
+  }, []);
+
+  useEffect(() => {
+    console.log(map);
+    console.log(data);
+    if (!map || !data) return;
+    
+
+    // code here
+    let dataJembatan = data.jembatan;
+    dataJembatan = dataJembatan.map(item => {
+      return {
+        type: "Feature",
+        geometry: {
+          type: item.geom.type,
+          coordinates: item.geom.coordinates,
+        }
+      }
+    });
+    console.log(dataJembatan);
+
+
     map.on("load", () => {
       // add data i.e. layers on the map
       // you can add as many layers
@@ -314,27 +340,6 @@ function App() {
         map.getCanvas().style.cursor = "";
       });
     });
-
-  }, []);
-
-  useEffect(() => {
-    console.log(map);
-    console.log(data);
-    if (!map || !data) return;
-    
-
-    // code here
-    let dataJembatan = data.jembatan;
-    dataJembatan = dataJembatan.map(item => {
-      return {
-        type: "Feature",
-        geometry: {
-          type: item.geom.type,
-          coordinates: item.geom.coordinates,
-        }
-      }
-    });
-    console.log(dataJembatan);
   }, [data, map]);
 
   return (
