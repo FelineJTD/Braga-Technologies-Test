@@ -8,6 +8,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "lord-icon-element": "^3.4.1",
+    "lottie-web": "^5.9.4",
     "mapbox-gl": "^2.9.1",
     "maplibre-gl": "^2.1.9",
     "react": "^18.0.0",

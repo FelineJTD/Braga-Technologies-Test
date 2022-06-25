@@ -8,8 +8,24 @@ import UseCaseCard from "./components/UseCaseCard"
 import IndustryCarousel from "./components/IndustryCarousel"
 import ProductCard from "./components/ProductCard";
 
+import { loadAnimation } from "lottie-web";
+import { defineLordIconElement } from "lord-icon-element";
+
+// register lottie and define custom element
+defineLordIconElement(loadAnimation);
+
 function App() {
   const mapCenter = {lon: 107.62799384411801, lat: -6.904165066892825};
+  const pathToPartnerLogos = "../src/assets/images/partner-logos/";
+  const partnerLogos = ["logo1.svg", "logo2.svg", "logo3.svg", "logo1.svg", "logo3.svg"];
+
+  const pathToProductImages = "../src/assets/images/products-photos/";
+  const productImages = ["product1.jpg", "product2.jpg", "product3.jpg", "product4.jpg"];
+
+  const industryContentTop = ["Healthcare", "Transport and Logistics", "Defense", "Cities and Government", "Communication Tech", "Oil, Gas, and Mining"];
+  const industryImageTop = ["healthcare.json", "logistics.json", "defense.json", "city.json", "communication.json", "mining.json"];
+  const industryContentBottom = ["Engineering", "Commercial and Retail", "Tourism and Leisure", "Real Estate", "Task Force", "IoT Management"];
+  const industryImageBottom = ["engineering.json", "retail.json", "leisure.json", "real-estate.json", "task-force.json", "iot.json"];
 
   /*
   This is an example snippet - you should consider tailoring it
@@ -212,6 +228,7 @@ function App() {
       <main className="pt-12 px-[5%] 2xl:px-[10%]">
         <section className="min-h-screen">
           <div className="w-full lg:w-[67%] 2xl:w-[50%]">
+            {/* <img src="../src/assets/images/braga-logo.svg" alt="" className="absolute -right-96 -top-96 w-[60rem] opacity-25 animate-spin" /> */}
             <p className="mb-4">Braga Geodashboard</p>
             <h1>Explore the city <br className="hidden md:block" />on a human scale</h1>
             <p>Analyze existing site conditions, measure key urban indicators, and perform spatial analysis &mdash; directly in the browser.</p>
@@ -221,6 +238,11 @@ function App() {
             <button className="bg-transparent border-2 border-black text-black hover:bg-blue hover:border-blue hover:text-white">Download Guidebook</button>
           </div>
           <div id="map" className="h-[50vh] w-full rounded-md border-2 border-black border-opacity-25" />
+          <div className="flex justify-start items-center mt-3 mb-24">
+            { partnerLogos.map((logo, index) => (
+              <img key={index} src={pathToPartnerLogos + logo} alt={logo} className="h-full mr-6" />
+            ))}
+          </div>
         </section>
         <section>
           <div className="w-full lg:w-[67%] 2xl:w-[50%]">
@@ -253,8 +275,8 @@ function App() {
           <FadeInSection className="my-24">
             <h4>Range of Industry</h4>
             <p>Morphocode Explorer helps planners, businesses, and cities do more with data.</p>
-            <IndustryCarousel content={["Healthcare", "Transport and Logistics", "Defense", "Cities and Government", "Communication Tech", "Oil, Gas, and Mining"]} toRight={true} />
-            <IndustryCarousel content={["Engineering", "Commercial and Retail", "Tourism and Leisure", "Real Estate", "Task Force", "IoT Management"]} toRight={false} />
+            <IndustryCarousel content={industryContentTop} icons={industryImageTop} toRight={true} />
+            <IndustryCarousel content={industryContentBottom} icons={industryImageBottom} toRight={false} />
           </FadeInSection>
           <FadeInSection className="my-24">
             <h4>Consumer Story</h4>

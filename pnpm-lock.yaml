@@ -5,6 +5,8 @@ specifiers:
   '@types/react-dom': ^18.0.0
   '@vitejs/plugin-react': ^1.3.0
   autoprefixer: ^10.4.7
+  lord-icon-element: ^3.4.1
+  lottie-web: ^5.9.4
   mapbox-gl: ^2.9.1
   maplibre-gl: ^2.1.9
   postcss: ^8.4.14
@@ -15,6 +17,8 @@ specifiers:
   vite: ^2.9.9
 
 dependencies:
+  lord-icon-element: 3.4.1
+  lottie-web: 5.9.4
   mapbox-gl: 2.9.1
   maplibre-gl: 2.1.9
   react: 18.2.0
@@ -1036,6 +1040,14 @@ packages:
     hasBin: true
     dependencies:
       js-tokens: 4.0.0
+    dev: false
+
+  /lord-icon-element/3.4.1:
+    resolution: {integrity: sha512-BoSLYFNgT7ILz66KL42u+3YYBPDl0/L2uIPaWIG7MUQvrwu8lTs7/0V1XhyHbLdj0QoZJ8AUBSZlStMs6nlhJA==}
+    dev: false
+
+  /lottie-web/5.9.4:
+    resolution: {integrity: sha512-bSs1ZTPifnBVejO1MnQHdfrKfcn02YTCmgOh2wcAEICqRA0V7GzDh8FnwXY6+EzT+i8XOunaIloo/5xC5YNbsA==}
     dev: false
 
   /mapbox-gl/2.9.1:
