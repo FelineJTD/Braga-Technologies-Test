@@ -228,12 +228,13 @@ function App() {
   return (
     <div>
       <Navbar />
-      <main className="pt-12">
-        <section className="min-h-screen px-[5%] 2xl:px-[10%]">
+      <main>
+        <section className="min-h-screen px-[5%] 2xl:px-[10%] border-b-2 border-black border-opacity-25 relative overflow-x-hidden pt-36">
+        <div className="w-[45vw] h-[45vw] bg-blue opacity-10 rounded-full absolute blur-2xl -top-[15vw] -right-[10vw]"/>
+            <div className="w-[25vw] h-[25vw] bg-blue opacity-10 rounded-full absolute blur-2xl top-[15vw] -left-[10vw]"/>
           <div className="w-full lg:w-[67%] 2xl:w-[50%]">
             {/* <img src="../src/assets/images/braga-logo.svg" alt="" className="absolute -right-96 -top-96 w-[60rem] opacity-25 animate-spin" /> */}
-            <div className="w-[45vw] h-[45vw] bg-blue opacity-10 rounded-full absolute blur-2xl -top-[15vw] -right-[10vw]"/>
-            <div className="w-[25vw] h-[25vw] bg-blue opacity-10 rounded-full absolute blur-2xl top-[15vw] -left-[10vw]"/>
+            
             <p className="mb-4">Braga Geodashboard</p>
             <h1>Explore the city <br className="hidden md:block" />on a human scale</h1>
             <p>Analyze existing site conditions, measure key urban indicators, and perform spatial analysis &mdash; directly in the browser.</p>
@@ -249,7 +250,7 @@ function App() {
             ))}
           </div>
         </section>
-        <section className="px-[5%] 2xl:px-[10%]">
+        <section className="px-[5%] 2xl:px-[10%] pt-12">
           <div className="w-full lg:w-[67%] 2xl:w-[50%]">
             <FadeInSection>
               <p className="mb-4 mt-6">Braga Geodashboard</p>
