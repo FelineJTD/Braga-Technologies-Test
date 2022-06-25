@@ -12,6 +12,8 @@ import logo1 from "./assets/images/partner-logos/logo1.svg";
 import logo2 from "./assets/images/partner-logos/logo2.svg";
 import logo3 from "./assets/images/partner-logos/logo3.svg";
 
+import logo from "./assets/images/braga-logo.svg";
+
 import { loadAnimation } from "lottie-web";
 import { defineLordIconElement } from "lord-icon-element";
 
@@ -232,6 +234,84 @@ function App() {
     // add control to map
     map.addControl(new StylesControl(), "bottom-left");
 
+    // wait for the map to init and load
+    // start adding data only after this
+    map.on("load", () => {
+      // add data i.e. layers on the map
+      // you can add as many layers
+      map.addLayer({
+        id: "customers-layer",
+        type: "circle",
+        paint: {
+          // stylize the layer
+          "circle-radius": 6,
+          "circle-color": "#d22",
+          "circle-blur": 0.8
+        },
+        source: {
+          // add data to the layer
+          // this should be obtained from the API server
+          type: "geojson",
+          data: {
+            type: "FeatureCollection",
+            features: [
+              ...Array(10)
+                .fill(0)
+                .map((_x, i) => ({
+                  // feature for Mapbox DC
+                  type: "Feature",
+                  geometry: {
+                    type: "Point",
+                    // randomly generated test data using Denver's long, lat
+                    // and then adding some positive and negative offsets
+                    // to randomize the location of points on the map
+                    coordinates: [ 
+                      107.62799384411801,
+                      -6.904165066892825
+                      
+                    ]
+                  },
+                  properties: {
+                    customersReached: Math.round(999 * Math.random())
+                  }
+                }))
+            ]
+          }
+        }
+      });
+
+      // attach event listeners
+      map.on("click", "customers-layer", function (e) {
+        const coordinates = e.features[0].geometry.coordinates.slice();
+        const { customersReached } = e.features[0].properties;
+
+        while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+          coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+        }
+
+        new maplibre.Popup()
+          .setLngLat(coordinates)
+          .setHTML(
+            `
+            <div style='padding: 8px;'>
+              <strong>Customers reached</strong>: ${customersReached}</div>
+            </div>
+            `
+          )
+          .addTo(map);
+      });
+
+      // cursor changes for better UX i.e.
+      // indicate that these points are clickable
+      map.on("mouseenter", "customers-layer", function () {
+        map.getCanvas().style.cursor = "pointer";
+      });
+
+      map.on("mouseleave", "customers-layer", function () {
+        map.getCanvas().style.cursor = "";
+      });
+    });
+
   }, []);
 
   return (
@@ -242,7 +322,6 @@ function App() {
         <div className="w-[45vw] h-[45vw] bg-blue opacity-10 rounded-full absolute blur-2xl -top-[15vw] -right-[10vw] z-0"/>
             <div className="w-[25vw] h-[25vw] bg-blue opacity-10 rounded-full absolute blur-2xl top-[15vw] -left-[10vw] z-0"/>
           <div className="w-full lg:w-[67%] 2xl:w-[50%] relative z-10">
-            {/* <img src="../src/assets/images/braga-logo.svg" alt="" className="absolute -right-96 -top-96 w-[60rem] opacity-25 animate-spin" /> */}
             
             <p className="mb-4">Braga Geodashboard</p>
             <h1>Explore the city <br className="hidden md:block" />on a human scale</h1>
@@ -252,7 +331,9 @@ function App() {
             <button className="bg-black text-white mr-6 hover:bg-blue">Product Demo</button>
             <button className="bg-transparent border-2 border-black text-black hover:bg-blue hover:border-blue hover:text-white">Download Guidebook</button>
           </div>
-          <div id="map" className="h-[50vh] w-full rounded-md border-2 border-black border-opacity-25 relative z-10" />
+          <div id="map" className="flex items-center justify-center h-[50vh] w-full rounded-md border-2 border-black border-opacity-25 relative z-10 bg-black bg-opacity-25">
+            <img src={logo} alt="Loading..." className="h-1/2 w-1/2 animate-pulse" />
+          </div>
           <div className="flex justify-start items-center mt-3 mb-24">
             { partnerLogos.map((logo, index) => (
               <img key={index} src={logo} alt={logo} className="h-full mr-6" />
