@@ -255,14 +255,14 @@ function App() {
     // console.log(dataJembatan);
 
     map.current.on("load", () => {
-      if (jembatanData) addJembatanLayer(); 
       if (jalanData) addJalanLayer(); 
+      if (jembatanData) addJembatanLayer(); 
     });
     
     map.current.on('styledata', function () {
       // Triggered when `setStyle` is called.
-      if (jembatanData) addJembatanLayer(); 
       if (jalanData) addJalanLayer(); 
+      if (jembatanData) addJembatanLayer(); 
     });
     
   }, [jembatanData, jalanData]);
