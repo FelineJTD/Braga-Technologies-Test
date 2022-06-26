@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useEffect, useState, useRef } from "react"
 import maplibre from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
 import './App.css'
@@ -23,6 +23,10 @@ defineLordIconElement(loadAnimation);
 function App() {
   const [data, setData] = useState(null);
   const mapCenter = {lon: 107.62799384411801, lat: -6.904165066892825};
+
+  const mapContainer = useRef(null);
+  const map = useRef(null);
+
   const partnerLogos = [logo1, logo2, logo3, logo1, logo3];
 
   const pathToProductImages = "../src/assets/images/products-photos/";
@@ -83,16 +87,18 @@ function App() {
   }
 
 
-  /** @type {maplibre.Map} */ let map;
+  // /** @type {maplibre.Map} */ let map;
 
   // maplibre
   useEffect(() => {
+    
     startFetchMyQuery().then(setData);
     // expands to
     // startFetchMyQuery().then((d) => setData(d));
     // initialize the map
 
-    map = new maplibre.Map({
+    if (map.current) return;
+    map.current = new maplibre.Map({
       container: "map",
       center: mapCenter,
       zoom: 10,
@@ -133,10 +139,10 @@ function App() {
     // add controls
 
     // fullscreen control
-    map.addControl(new maplibre.FullscreenControl(), "top-right");
+    map.current.addControl(new maplibre.FullscreenControl(), "top-right");
 
     // zoom in/out control; disable compass tool here (this does pitch/bearing reset on the map)
-    map.addControl(
+    map.current.addControl(
       new maplibre.NavigationControl({
         showCompass: false
       }),
@@ -144,7 +150,7 @@ function App() {
     );
 
     // geolocate control; lets user find themselves with click of a button
-    map.addControl(
+    map.current.addControl(
       new maplibre.GeolocateControl({
         positionOptions: {
           enableHighAccuracy: true
@@ -233,7 +239,7 @@ function App() {
     }
 
     // add control to map
-    map.addControl(new StylesControl(), "bottom-left");
+    map.current.addControl(new StylesControl(), "bottom-left");
 
     // wait for the map to init and load
     // start adding data only after this
@@ -242,9 +248,9 @@ function App() {
   }, []);
 
   useEffect(() => {
-    console.log(map);
+    console.log(map.current);
     console.log(data);
-    if (!map || !data) return;
+    if (!(map.current && data)) return;
     
 
     // code here
@@ -261,10 +267,10 @@ function App() {
     console.log(dataJembatan);
 
 
-    map.on("load", () => {
+    map.current.on("load", () => {
       // add data i.e. layers on the map
       // you can add as many layers
-      map.addLayer({
+      map.current.addLayer({
         id: "customers-layer",
         type: "circle",
         paint: {
@@ -310,7 +316,7 @@ function App() {
       });
 
       // attach event listeners
-      map.on("click", "customers-layer", function (e) {
+      map.current.on("click", "customers-layer", function (e) {
         const coordinates = e.features[0].geometry.coordinates.slice();
         const { customersReached } = e.features[0].properties;
 
@@ -332,15 +338,15 @@ function App() {
 
       // cursor changes for better UX i.e.
       // indicate that these points are clickable
-      map.on("mouseenter", "customers-layer", function () {
+      map.current.on("mouseenter", "customers-layer", function () {
         map.getCanvas().style.cursor = "pointer";
       });
 
-      map.on("mouseleave", "customers-layer", function () {
+      map.current.on("mouseleave", "customers-layer", function () {
         map.getCanvas().style.cursor = "";
       });
     });
-  }, [data, map]);
+  }, [data]);
 
   return (
     <div>
