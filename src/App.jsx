@@ -3,6 +3,7 @@ import maplibre from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
 import './App.css'
 import StylesControl from "./helpers/StylesControl";
+import LayersControl from "./helpers/LayersControl";
 import Navbar from './components/Navbar'
 import FadeInSection from "./components/FadeInSection/FadeInSection"
 import UseCaseCard from "./components/UseCaseCard"
@@ -233,6 +234,9 @@ function App() {
 
     // add control to map
     map.current.addControl(new StylesControl(), "bottom-left");
+
+    // add layers control to map
+    map.current.addControl(new LayersControl(), "bottom-left");
   }, []);
 
   useEffect(() => {
@@ -263,75 +267,6 @@ function App() {
     
   }, [jembatanData, jalanData]);
 
-
-
-
-
-  // JALAN DATA
-  // useEffect(() => {
-  //   if (!(map.current && jalanData)) return;
-  //   // code here
-  //   // let dataJembatan = jembatanData.jembatan;
-  //   // dataJembatan = dataJembatan.map(item => {
-  //   //   return {
-  //   //     type: "Feature",
-  //   //     geometry: {
-  //   //       type: item.geom.type,
-  //   //       coordinates: item.geom.coordinates,
-  //   //     }
-  //   //   }
-  //   // });
-  //   // console.log(dataJembatan);
-
-    
-  //   // add data to map
-    
-
-  //   //   // attach event listeners
-  //   //   map.current.on("click", "jembatan-layer", function (e) {
-  //   //     const coordinates = e.features[0].geometry.coordinates.slice();
-  //   //     const { customersReached } = e.features[0].properties;
-
-  //   //     while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
-  //   //       coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
-  //   //     }
-
-  //   //     new maplibre.Popup()
-  //   //       .setLngLat(coordinates)
-  //   //       .setHTML(
-  //   //         `
-  //   //         <div style='padding: 8px;'>
-  //   //           <strong>Customers reached</strong>: ${customersReached}</div>
-  //   //         </div>
-  //   //         `
-  //   //       )
-  //   //       .addTo(map.current);
-  //   //   });
-
-  //   //   // cursor changes for better UX i.e.
-  //   //   // indicate that these points are clickable
-  //   //   map.current.on("mouseenter", "jembatan-layer", function () {
-  //   //     map.current.getCanvas().style.cursor = "pointer";
-  //   //   });
-
-  //   //   map.current.on("mouseleave", "jembatan-layer", function () {
-  //   //     map.current.getCanvas().style.cursor = "";
-  //   //   });
-  //   // }
-
-
-
-  //   map.current.on("load", () => {
-  //     console.log("hey");
-  //     addJalanLayer();
-  //   });
-    
-  //   // map.current.on('styledata', function () {
-  //   //   // Triggered when `setStyle` is called.
-  //   //   addJalanLayer();
-  //   // });
-    
-  // }, [jalanData]);
 
   return (
     <div>
