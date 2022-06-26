@@ -23,7 +23,7 @@ import { defineLordIconElement } from "lord-icon-element";
 defineLordIconElement(loadAnimation);
 
 function App() {
-  // Jembatan Data
+  // Data
   const [jembatanData, setJembatanData] = useState(null);
   const [jalanData, setJalanData] = useState(null);
 
@@ -73,6 +73,7 @@ function App() {
   `;
 
   function addJalanLayer() {
+    if (map.current.getLayer('jalan-layer')) return;
     map.current.addLayer({
       id: "jalan-layer",
       type: "line",
@@ -101,9 +102,11 @@ function App() {
       }
       
     });
+    map.current.setLayoutProperty("jalan-layer", "visibility", "visible");
   }
 
   function addJembatanLayer() {
+    if (map.current.getLayer('jembatan-layer')) return;
     map.current.addLayer({
       id: "jembatan-layer",
       type: "circle",
@@ -167,6 +170,7 @@ function App() {
     map.current.on("mouseleave", "jembatan-layer", function () {
       map.current.getCanvas().style.cursor = "";
     });
+    map.current.setLayoutProperty("jembatan-layer", "visibility", "visible");
   }
 
   // maplibre
