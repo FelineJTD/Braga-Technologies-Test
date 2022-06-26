@@ -264,58 +264,56 @@ function App() {
     console.log(dataJembatan);
 
     
-    
-        // add data i.e. layers on the map
-        // you can add as many layers
-      function addJembatanLayer() {
-        map.current.addLayer({
-          id: "customers-layer",
-          type: "circle",
-          paint: {
-            // stylize the layer
-            "circle-radius": 6,
-            "circle-color": "#d22",
-            "circle-blur": 0.8
-          },
-          source: {
-            // add data to the layer
-            // this should be obtained from the API server
-            type: "geojson",
-            data: 
-            {
-              type: "FeatureCollection",
-              features: [
-                ...Array(262)
-                  .fill(0)
-                  .map((_x, i) => ({
-                    // feature for Mapbox DC
-                    type: "Feature",
-                    geometry: {
-                      type: "Point",
-                      coordinates: 
-                      data["jembatan"][i]["geom"]["coordinates"]
-                      // type: "Point",
-                      // randomly generated test data using Denver's long, lat
-                      // and then adding some positive and negative offsets
-                      // to randomize the location of points on the map
-                      // coordinates: [ 
-                      //   107.62799384411801,
-                      //   -6.904165066892825
-                        
-                      // ]
-                    },
-                    properties: {
-                      customersReached: Math.round(999 * Math.random())
-                    }
-                  }))
-              ]
-            }
+    // add data to map
+    function addJembatanLayer() {
+      map.current.addLayer({
+        id: "jembatan-layer",
+        type: "circle",
+        paint: {
+          // stylize the layer
+          "circle-radius": 6,
+          "circle-color": "#d22",
+          "circle-blur": 0.8
+        },
+        source: {
+          // add data to the layer
+          // this should be obtained from the API server
+          type: "geojson",
+          data: 
+          {
+            type: "FeatureCollection",
+            features: [
+              ...Array(262)
+                .fill(0)
+                .map((_x, i) => ({
+                  // feature for Mapbox DC
+                  type: "Feature",
+                  geometry: {
+                    type: "Point",
+                    coordinates: 
+                    data["jembatan"][i]["geom"]["coordinates"]
+                    // type: "Point",
+                    // randomly generated test data using Denver's long, lat
+                    // and then adding some positive and negative offsets
+                    // to randomize the location of points on the map
+                    // coordinates: [ 
+                    //   107.62799384411801,
+                    //   -6.904165066892825
+                      
+                    // ]
+                  },
+                  properties: {
+                    customersReached: Math.round(999 * Math.random())
+                  }
+                }))
+            ]
           }
-          
+        }
+        
       });
 
       // attach event listeners
-      map.current.on("click", "customers-layer", function (e) {
+      map.current.on("click", "jembatan-layer", function (e) {
         const coordinates = e.features[0].geometry.coordinates.slice();
         const { customersReached } = e.features[0].properties;
 
@@ -332,20 +330,21 @@ function App() {
             </div>
             `
           )
-          .addTo(map);
-        });
+          .addTo(map.current);
+      });
 
-        // cursor changes for better UX i.e.
-        // indicate that these points are clickable
-        map.current.on("mouseenter", "customers-layer", function () {
-          map.getCanvas().style.cursor = "pointer";
-        });
+      // cursor changes for better UX i.e.
+      // indicate that these points are clickable
+      map.current.on("mouseenter", "jembatan-layer", function () {
+        map.current.getCanvas().style.cursor = "pointer";
+      });
 
-        map.current.on("mouseleave", "customers-layer", function () {
-          map.getCanvas().style.cursor = "";
-        });
-      
+      map.current.on("mouseleave", "jembatan-layer", function () {
+        map.current.getCanvas().style.cursor = "";
+      });
     }
+
+
 
     map.current.on("load", () => {
       addJembatanLayer();
@@ -353,9 +352,9 @@ function App() {
     
     map.current.on('styledata', function () {
       // Triggered when `setStyle` is called.
-      console.log('style loaded');
       addJembatanLayer();
     });
+    
   }, [data]);
 
   return (
