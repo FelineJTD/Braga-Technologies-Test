@@ -72,16 +72,14 @@ function App() {
   `;
 
   function addJalanLayer() {
-    console.log(jalanData["ruas_jalan"]);
     map.current.addLayer({
       id: "jalan-layer",
       type: "line",
-      // paint: {
-      //   // stylize the layer
-      //   "circle-radius": 6,
-      //   "circle-color": "#d22",
-      //   "circle-blur": 0.8
-      // },
+      paint: {
+        // stylize the layer
+        "line-color": "#3773CE",
+        "line-width": 2
+      },
       source: {
         // add data to the layer
         // this should be obtained from the API server
@@ -95,20 +93,7 @@ function App() {
               .map((_x, i) => ({
                 // feature for Mapbox DC
                 type: "Feature",
-                geometry: {
-                  type: "MultiLineString",
-                  coordinates: 
-                  jalanData["ruas_jalan"][i]["geom"]["coordinates"]
-                  // type: "Point",
-                  // randomly generated test data using Denver's long, lat
-                  // and then adding some positive and negative offsets
-                  // to randomize the location of points on the map
-                  // coordinates: [ 
-                  //   107.62799384411801,
-                  //   -6.904165066892825
-                    
-                  // ]
-                },
+                geometry: jalanData["ruas_jalan"][i]["geom"],
               }))
           ]
         }
@@ -135,25 +120,12 @@ function App() {
         {
           type: "FeatureCollection",
           features: [
-            ...Array(262)
+            ...Array(jembatanData["jembatan"].length)
               .fill(0)
               .map((_x, i) => ({
                 // feature for Mapbox DC
                 type: "Feature",
-                geometry: {
-                  type: "Point",
-                  coordinates: 
-                  jembatanData["jembatan"][i]["geom"]["coordinates"]
-                  // type: "Point",
-                  // randomly generated test data using Denver's long, lat
-                  // and then adding some positive and negative offsets
-                  // to randomize the location of points on the map
-                  // coordinates: [ 
-                  //   107.62799384411801,
-                  //   -6.904165066892825
-                    
-                  // ]
-                },
+                geometry: jembatanData["jembatan"][i]["geom"],
                 properties: {
                   customersReached: Math.round(999 * Math.random())
                 }
