@@ -2,6 +2,7 @@ import { useEffect, useState, useRef } from "react"
 import maplibre from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
 import './App.css'
+import StylesControl from "./helpers/StylesControl";
 import Navbar from './components/Navbar'
 import FadeInSection from "./components/FadeInSection/FadeInSection"
 import UseCaseCard from "./components/UseCaseCard"
@@ -23,6 +24,7 @@ defineLordIconElement(loadAnimation);
 function App() {
   // Jembatan Data
   const [jembatanData, setJembatanData] = useState(null);
+  const [jalanData, setJalanData] = useState(null);
 
   // Map
   const mapCenter = {lon: 107.62799384411801, lat: -6.904165066892825};
@@ -55,21 +57,154 @@ function App() {
     return data;
   }
 
-  // Jembatan Query
-  const jembatanQuery = `
+  // Query
+  const Query = `
     query jembatanQuery {
       jembatan {
         geom
       }
     }
+    query jalanQuery {
+      ruas_jalan {
+        geom
+      }
+    }
   `;
+
+  function addJalanLayer() {
+    console.log(jalanData["ruas_jalan"]);
+    map.current.addLayer({
+      id: "jalan-layer",
+      type: "line",
+      // paint: {
+      //   // stylize the layer
+      //   "circle-radius": 6,
+      //   "circle-color": "#d22",
+      //   "circle-blur": 0.8
+      // },
+      source: {
+        // add data to the layer
+        // this should be obtained from the API server
+        type: "geojson",
+        data: 
+        {
+          type: "FeatureCollection",
+          features: [
+            ...Array(jalanData.ruas_jalan.length)
+              .fill(0)
+              .map((_x, i) => ({
+                // feature for Mapbox DC
+                type: "Feature",
+                geometry: {
+                  type: "MultiLineString",
+                  coordinates: 
+                  jalanData["ruas_jalan"][i]["geom"]["coordinates"]
+                  // type: "Point",
+                  // randomly generated test data using Denver's long, lat
+                  // and then adding some positive and negative offsets
+                  // to randomize the location of points on the map
+                  // coordinates: [ 
+                  //   107.62799384411801,
+                  //   -6.904165066892825
+                    
+                  // ]
+                },
+              }))
+          ]
+        }
+      }
+      
+    });
+  }
+
+  function addJembatanLayer() {
+    map.current.addLayer({
+      id: "jembatan-layer",
+      type: "circle",
+      paint: {
+        // stylize the layer
+        "circle-radius": 6,
+        "circle-color": "#d22",
+        "circle-blur": 0.8
+      },
+      source: {
+        // add data to the layer
+        // this should be obtained from the API server
+        type: "geojson",
+        data: 
+        {
+          type: "FeatureCollection",
+          features: [
+            ...Array(262)
+              .fill(0)
+              .map((_x, i) => ({
+                // feature for Mapbox DC
+                type: "Feature",
+                geometry: {
+                  type: "Point",
+                  coordinates: 
+                  jembatanData["jembatan"][i]["geom"]["coordinates"]
+                  // type: "Point",
+                  // randomly generated test data using Denver's long, lat
+                  // and then adding some positive and negative offsets
+                  // to randomize the location of points on the map
+                  // coordinates: [ 
+                  //   107.62799384411801,
+                  //   -6.904165066892825
+                    
+                  // ]
+                },
+                properties: {
+                  customersReached: Math.round(999 * Math.random())
+                }
+              }))
+          ]
+        }
+      }
+      
+    });
+
+    // attach event listeners
+    map.current.on("click", "jembatan-layer", function (e) {
+      const coordinates = e.features[0].geometry.coordinates.slice();
+      const { customersReached } = e.features[0].properties;
+
+      while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+        coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+      }
+
+      new maplibre.Popup()
+        .setLngLat(coordinates)
+        .setHTML(
+          `
+          <div style='padding: 8px;'>
+            <strong>Customers reached</strong>: ${customersReached}</div>
+          </div>
+          `
+        )
+        .addTo(map.current);
+    });
+
+    // cursor changes for better UX i.e.
+    // indicate that these points are clickable
+    map.current.on("mouseenter", "jembatan-layer", function () {
+      map.current.getCanvas().style.cursor = "pointer";
+    });
+
+    map.current.on("mouseleave", "jembatan-layer", function () {
+      map.current.getCanvas().style.cursor = "";
+    });
+  }
 
   // maplibre
   useEffect(() => {
     // Fetch Map Data
-    fetchGraphQL(jembatanQuery, "jembatanQuery", {}).then(setJembatanData);
+    fetchGraphQL(Query, "jembatanQuery", {}).then(setJembatanData);
+    fetchGraphQL(Query, "jalanQuery", {}).then((d) => {setJalanData(d); console.log(d)});
 
-    if (map.current) return;
+    if (map.current) return; // don't run if map already exists
+
+    // Create Map
     map.current = new maplibre.Map({
       container: "map",
       center: mapCenter,
@@ -98,17 +233,9 @@ function App() {
         ]
       }
       
-    }, []);
+    });
 
-    // this is required
-    // map.addControl(
-    //   new maplibre.AttributionControl({
-    //     customAttribution:
-    //       '<a href="https://www.openstreetmap.org/copyright">© OpenStreetMap contributors</a>'
-    //   })
-    // );
-
-    // add controls
+    // Add Controls to Map
 
     // fullscreen control
     map.current.addControl(new maplibre.FullscreenControl(), "top-right");
@@ -132,202 +259,107 @@ function App() {
       "bottom-right"
     );
 
-    // Control implemented as ES6 class
-    class StylesControl {
-      onAdd(map) {
-        this._map = map;
-        this._satellite = document.createElement("button");
-        this._satellite.className = "bg-[#AAA] font-bold";
-        this._satellite.disabled = true;
-        this._satellite.textContent = "Satellite";
-        this._satellite.addEventListener("click", () => {
-          this._satellite.className = "bg-[#AAA] font-bold";
-          this._roadmap.className = "satellite";
-          this._satellite.disabled = true;
-          this._roadmap.disabled = false;
-          this._map.setStyle(
-            {
-              version: 8,
-              sources: {
-                basemap: {
-                  type: "raster",
-                  tiles: ["https://api.maptiler.com/maps/hybrid/256/{z}/{x}/{y}.jpg?key=49Mv4xVcjc0elsx4SmPM"],
-                  tileSize: 256
-                }
-              },
-              layers: [
-                {
-                  id: "basemap",
-                  type: "raster",
-                  source: "basemap",
-                  minzoom: 0,
-                  maxzoom: 20
-                }
-              ]
-            }
-          );
-        });
-        this._roadmap = document.createElement("button");
-        this._roadmap.className = "roadmap";
-        this._roadmap.textContent = "Roadmap";
-        this._roadmap.addEventListener("click", () => {
-          this._roadmap.className = "bg-[#DDD] font-bold";
-          this._satellite.className = "satellite";
-          this._roadmap.disabled = true;
-          this._satellite.disabled = false;
-          this._map.setStyle(
-            {
-              version: 8,
-              sources: {
-                basemap: {
-                  type: "raster",
-                  tiles: ["https://api.maptiler.com/maps/streets/256/{z}/{x}/{y}.png?key=49Mv4xVcjc0elsx4SmPM"],
-                  tileSize: 256
-                }
-              },
-              layers: [
-                {
-                  id: "basemap",
-                  type: "raster",
-                  source: "basemap",
-                  minzoom: 0,
-                  maxzoom: 20
-                }
-              ]
-            }
-          );
-        });
-        this._container = document.createElement('div');
-        this._container.className = 'mapboxgl-ctrl bg-white rounded-md border-black border-[1px]';
-        this._container.appendChild(this._satellite);
-        this._container.appendChild(this._roadmap);
-        return this._container;
-      }
-
-      onRemove() {
-        this._container.parentNode.removeChild(this._container);
-        this._map = undefined;
-      }
-    }
-
     // add control to map
     map.current.addControl(new StylesControl(), "bottom-left");
-
-    // wait for the map to init and load
-    // start adding data only after this
-    
-
   }, []);
 
   useEffect(() => {
-    if (!(map.current && jembatanData)) return;
+    if (!(map.current && (jembatanData || jalanData))) return;
 
-    // code here
-    let dataJembatan = jembatanData.jembatan;
-    dataJembatan = dataJembatan.map(item => {
-      return {
-        type: "Feature",
-        geometry: {
-          type: item.geom.type,
-          coordinates: item.geom.coordinates,
-        }
-      }
-    });
-    console.log(dataJembatan);
-
-    
-    // add data to map
-    function addJembatanLayer() {
-      map.current.addLayer({
-        id: "jembatan-layer",
-        type: "circle",
-        paint: {
-          // stylize the layer
-          "circle-radius": 6,
-          "circle-color": "#d22",
-          "circle-blur": 0.8
-        },
-        source: {
-          // add data to the layer
-          // this should be obtained from the API server
-          type: "geojson",
-          data: 
-          {
-            type: "FeatureCollection",
-            features: [
-              ...Array(262)
-                .fill(0)
-                .map((_x, i) => ({
-                  // feature for Mapbox DC
-                  type: "Feature",
-                  geometry: {
-                    type: "Point",
-                    coordinates: 
-                    jembatanData["jembatan"][i]["geom"]["coordinates"]
-                    // type: "Point",
-                    // randomly generated test data using Denver's long, lat
-                    // and then adding some positive and negative offsets
-                    // to randomize the location of points on the map
-                    // coordinates: [ 
-                    //   107.62799384411801,
-                    //   -6.904165066892825
-                      
-                    // ]
-                  },
-                  properties: {
-                    customersReached: Math.round(999 * Math.random())
-                  }
-                }))
-            ]
-          }
-        }
-        
-      });
-
-      // attach event listeners
-      map.current.on("click", "jembatan-layer", function (e) {
-        const coordinates = e.features[0].geometry.coordinates.slice();
-        const { customersReached } = e.features[0].properties;
-
-        while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
-          coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
-        }
-
-        new maplibre.Popup()
-          .setLngLat(coordinates)
-          .setHTML(
-            `
-            <div style='padding: 8px;'>
-              <strong>Customers reached</strong>: ${customersReached}</div>
-            </div>
-            `
-          )
-          .addTo(map.current);
-      });
-
-      // cursor changes for better UX i.e.
-      // indicate that these points are clickable
-      map.current.on("mouseenter", "jembatan-layer", function () {
-        map.current.getCanvas().style.cursor = "pointer";
-      });
-
-      map.current.on("mouseleave", "jembatan-layer", function () {
-        map.current.getCanvas().style.cursor = "";
-      });
-    }
-
-
+    // let dataJembatan = jembatanData.jembatan;
+    // dataJembatan = dataJembatan.map(item => {
+    //   return {
+    //     type: "Feature",
+    //     geometry: {
+    //       type: item.geom.type,
+    //       coordinates: item.geom.coordinates,
+    //     }
+    //   }
+    // });
+    // console.log(dataJembatan);
 
     map.current.on("load", () => {
-      addJembatanLayer();
+      if (jembatanData) addJembatanLayer(); 
+      if (jalanData) addJalanLayer(); 
     });
     
     map.current.on('styledata', function () {
       // Triggered when `setStyle` is called.
-      addJembatanLayer();
+      if (jembatanData) addJembatanLayer(); 
+      if (jalanData) addJalanLayer(); 
     });
     
-  }, [jembatanData]);
+  }, [jembatanData, jalanData]);
+
+
+
+
+
+  // JALAN DATA
+  // useEffect(() => {
+  //   if (!(map.current && jalanData)) return;
+  //   // code here
+  //   // let dataJembatan = jembatanData.jembatan;
+  //   // dataJembatan = dataJembatan.map(item => {
+  //   //   return {
+  //   //     type: "Feature",
+  //   //     geometry: {
+  //   //       type: item.geom.type,
+  //   //       coordinates: item.geom.coordinates,
+  //   //     }
+  //   //   }
+  //   // });
+  //   // console.log(dataJembatan);
+
+    
+  //   // add data to map
+    
+
+  //   //   // attach event listeners
+  //   //   map.current.on("click", "jembatan-layer", function (e) {
+  //   //     const coordinates = e.features[0].geometry.coordinates.slice();
+  //   //     const { customersReached } = e.features[0].properties;
+
+  //   //     while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+  //   //       coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+  //   //     }
+
+  //   //     new maplibre.Popup()
+  //   //       .setLngLat(coordinates)
+  //   //       .setHTML(
+  //   //         `
+  //   //         <div style='padding: 8px;'>
+  //   //           <strong>Customers reached</strong>: ${customersReached}</div>
+  //   //         </div>
+  //   //         `
+  //   //       )
+  //   //       .addTo(map.current);
+  //   //   });
+
+  //   //   // cursor changes for better UX i.e.
+  //   //   // indicate that these points are clickable
+  //   //   map.current.on("mouseenter", "jembatan-layer", function () {
+  //   //     map.current.getCanvas().style.cursor = "pointer";
+  //   //   });
+
+  //   //   map.current.on("mouseleave", "jembatan-layer", function () {
+  //   //     map.current.getCanvas().style.cursor = "";
+  //   //   });
+  //   // }
+
+
+
+  //   map.current.on("load", () => {
+  //     console.log("hey");
+  //     addJalanLayer();
+  //   });
+    
+  //   // map.current.on('styledata', function () {
+  //   //   // Triggered when `setStyle` is called.
+  //   //   addJalanLayer();
+  //   // });
+    
+  // }, [jalanData]);
 
   return (
     <div>
