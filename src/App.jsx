@@ -21,27 +21,23 @@ import { defineLordIconElement } from "lord-icon-element";
 defineLordIconElement(loadAnimation);
 
 function App() {
-  const [data, setData] = useState(null);
-  const mapCenter = {lon: 107.62799384411801, lat: -6.904165066892825};
+  // Jembatan Data
+  const [jembatanData, setJembatanData] = useState(null);
 
-  const mapContainer = useRef(null);
+  // Map
+  const mapCenter = {lon: 107.62799384411801, lat: -6.904165066892825};
   const map = useRef(null);
 
+  // Partner Logos
   const partnerLogos = [logo1, logo2, logo3, logo1, logo3];
 
-  const pathToProductImages = "../src/assets/images/products-photos/";
-  const productImages = ["product1.jpg", "product2.jpg", "product3.jpg", "product4.jpg"];
-
+  // Industry Carousel Data
   const industryContentTop = ["Healthcare", "Transport and Logistics", "Defense", "Cities and Government", "Communication Tech", "Oil, Gas, and Mining"];
   const industryImageTop = ["healthcare.json", "logistics.json", "defense.json", "city.json", "communication.json", "mining.json"];
   const industryContentBottom = ["Engineering", "Commercial and Retail", "Tourism and Leisure", "Real Estate", "Task Force", "IoT Management"];
   const industryImageBottom = ["engineering.json", "retail.json", "leisure.json", "real-estate.json", "task-force.json", "iot.json"];
 
-  /*
-  This is an example snippet - you should consider tailoring it
-  to your service.
-  */
-
+  // Fetch Map Data
   async function fetchGraphQL(operationsDoc, operationName, variables) {
     const result = await fetch(
       "https://sipjatan.com/hasura/v1/graphql",
@@ -54,48 +50,24 @@ function App() {
         })
       }
     );
-
-    return await result.json();
+    const { errors, data } = await result.json();
+    if (errors) console.error(errors);
+    return data;
   }
 
-  const operationsDoc = `
-    query MyQuery {
+  // Jembatan Query
+  const jembatanQuery = `
+    query jembatanQuery {
       jembatan {
         geom
       }
     }
   `;
 
-  function fetchMyQuery() {
-    return fetchGraphQL(
-      operationsDoc,
-      "MyQuery",
-      {}
-    );
-  }
-
-  async function startFetchMyQuery() {
-    const { errors, data } = await fetchMyQuery();
-
-    if (errors) {
-      // handle those errors like a pro
-      console.error(errors);
-    }
-
-    // do something great with this precious data
-    return data;
-  }
-
-
-  // /** @type {maplibre.Map} */ let map;
-
   // maplibre
   useEffect(() => {
-    
-    startFetchMyQuery().then(setData);
-    // expands to
-    // startFetchMyQuery().then((d) => setData(d));
-    // initialize the map
+    // Fetch Map Data
+    fetchGraphQL(jembatanQuery, "jembatanQuery", {}).then(setJembatanData);
 
     if (map.current) return;
     map.current = new maplibre.Map({
@@ -248,10 +220,10 @@ function App() {
   }, []);
 
   useEffect(() => {
-    if (!(map.current && data)) return;
+    if (!(map.current && jembatanData)) return;
 
     // code here
-    let dataJembatan = data.jembatan;
+    let dataJembatan = jembatanData.jembatan;
     dataJembatan = dataJembatan.map(item => {
       return {
         type: "Feature",
@@ -291,7 +263,7 @@ function App() {
                   geometry: {
                     type: "Point",
                     coordinates: 
-                    data["jembatan"][i]["geom"]["coordinates"]
+                    jembatanData["jembatan"][i]["geom"]["coordinates"]
                     // type: "Point",
                     // randomly generated test data using Denver's long, lat
                     // and then adding some positive and negative offsets
@@ -355,7 +327,7 @@ function App() {
       addJembatanLayer();
     });
     
-  }, [data]);
+  }, [jembatanData]);
 
   return (
     <div>
