@@ -173,7 +173,7 @@ function App() {
   useEffect(() => {
     // Fetch Map Data
     fetchGraphQL(Query, "jembatanQuery", {}).then(setJembatanData);
-    fetchGraphQL(Query, "jalanQuery", {}).then((d) => {setJalanData(d); console.log(d)});
+    fetchGraphQL(Query, "jalanQuery", {}).then(setJalanData);
 
     if (map.current) return; // don't run if map already exists
 
