@@ -1,25 +1,27 @@
 import { useEffect, useState, useRef } from "react"
+
+// Maplibre
 import maplibre from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
-import './App.css'
 import StylesControl from "./helpers/StylesControl";
 import LayersControl from "./helpers/LayersControl";
+
+// Components
 import Navbar from './components/Navbar'
 import FadeInSection from "./components/FadeInSection/FadeInSection"
 import UseCaseCard from "./components/UseCaseCard"
 import IndustryCarousel from "./components/IndustryCarousel"
 import ProductCard from "./components/ProductCard";
 
+// Assets
 import logo1 from "./assets/images/partner-logos/logo1.svg";
 import logo2 from "./assets/images/partner-logos/logo2.svg";
 import logo3 from "./assets/images/partner-logos/logo3.svg";
-
 import logo from "./assets/images/braga-logo.svg";
 
+// Icons
 import { loadAnimation } from "lottie-web";
 import { defineLordIconElement } from "lord-icon-element";
-
-// register lottie and define custom element
 defineLordIconElement(loadAnimation);
 
 function App() {
@@ -35,6 +37,7 @@ function App() {
   const partnerLogos = [logo1, logo2, logo3, logo1, logo3];
 
   // Industry Carousel Data
+  // The format is cursed, sorry
   const industryContentTop = ["Healthcare", "Transport and Logistics", "Defense", "Cities and Government", "Communication Tech", "Oil, Gas, and Mining"];
   const industryImageTop = ["healthcare.json", "logistics.json", "defense.json", "city.json", "communication.json", "mining.json"];
   const industryContentBottom = ["Engineering", "Commercial and Retail", "Tourism and Leisure", "Real Estate", "Task Force", "IoT Management"];
@@ -72,6 +75,10 @@ function App() {
     }
   `;
 
+  // Function to Add Data to Map
+  // Reference: https://codesandbox.io/s/ofk4g
+
+  // Jalan Layer
   function addJalanLayer() {
     if (map.current.getLayer('jalan-layer')) return;
     map.current.addLayer({
@@ -84,12 +91,12 @@ function App() {
       },
       source: {
         // add data to the layer
-        // this should be obtained from the API server
         type: "geojson",
         data: 
         {
           type: "FeatureCollection",
           features: [
+            // Data should have been cleaned beforehand and made into GeoJSON format but I'm running out of time so I'm using this codesandbox code
             ...Array(jalanData.ruas_jalan.length)
               .fill(0)
               .map((_x, i) => ({
@@ -105,6 +112,7 @@ function App() {
     map.current.setLayoutProperty("jalan-layer", "visibility", "visible");
   }
 
+  // Jembatan Layer
   function addJembatanLayer() {
     if (map.current.getLayer('jembatan-layer')) return;
     map.current.addLayer({
@@ -129,46 +137,11 @@ function App() {
               .map((_x, i) => ({
                 // feature for Mapbox DC
                 type: "Feature",
-                geometry: jembatanData["jembatan"][i]["geom"],
-                properties: {
-                  customersReached: Math.round(999 * Math.random())
-                }
+                geometry: jembatanData["jembatan"][i]["geom"]
               }))
           ]
         }
       }
-      
-    });
-
-    // attach event listeners
-    map.current.on("click", "jembatan-layer", function (e) {
-      const coordinates = e.features[0].geometry.coordinates.slice();
-      const { customersReached } = e.features[0].properties;
-
-      while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
-        coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
-      }
-
-      new maplibre.Popup()
-        .setLngLat(coordinates)
-        .setHTML(
-          `
-          <div style='padding: 8px;'>
-            <strong>Customers reached</strong>: ${customersReached}</div>
-          </div>
-          `
-        )
-        .addTo(map.current);
-    });
-
-    // cursor changes for better UX i.e.
-    // indicate that these points are clickable
-    map.current.on("mouseenter", "jembatan-layer", function () {
-      map.current.getCanvas().style.cursor = "pointer";
-    });
-
-    map.current.on("mouseleave", "jembatan-layer", function () {
-      map.current.getCanvas().style.cursor = "";
     });
     map.current.setLayoutProperty("jembatan-layer", "visibility", "visible");
   }
@@ -190,6 +163,7 @@ function App() {
       minZoom: 0,
       maxZoom: 20,
       style: 
+      // I have no idea what the difference is between this format and the one-link-only format, but I find that this one is faster in rendering
       {
         version: 8,
         sources: {
@@ -243,9 +217,11 @@ function App() {
     map.current.addControl(new LayersControl(), "bottom-left");
   }, []);
 
+  // Add data to map
   useEffect(() => {
     if (!(map.current && (jembatanData || jalanData))) return;
 
+    // Attempt to clean data
     // let dataJembatan = jembatanData.jembatan;
     // dataJembatan = dataJembatan.map(item => {
     //   return {
