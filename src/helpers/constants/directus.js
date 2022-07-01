@@ -1,0 +1,1 @@
+export const DIRECTUS_API_URL = "https://op09x99i.directus.app";

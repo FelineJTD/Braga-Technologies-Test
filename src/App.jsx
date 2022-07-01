@@ -6,6 +6,10 @@ import "maplibre-gl/dist/maplibre-gl.css";
 import StylesControl from "./helpers/StylesControl";
 import LayersControl from "./helpers/LayersControl";
 
+// Directus
+import { Directus } from '@directus/sdk';
+import { DIRECTUS_API_URL } from "./helpers/constants/directus";
+
 // Components
 import Navbar from './components/Navbar'
 import FadeInSection from "./components/FadeInSection/FadeInSection"
@@ -14,9 +18,6 @@ import IndustryCarousel from "./components/IndustryCarousel"
 import ProductCard from "./components/ProductCard";
 
 // Assets
-import logo1 from "./assets/images/partner-logos/logo1.svg";
-import logo2 from "./assets/images/partner-logos/logo2.svg";
-import logo3 from "./assets/images/partner-logos/logo3.svg";
 import logo from "./assets/images/braga-logo.svg";
 
 // Icons
@@ -29,19 +30,42 @@ function App() {
   const [jembatanData, setJembatanData] = useState(null);
   const [jalanData, setJalanData] = useState(null);
 
+  const [headlineTitle, setHeadlineTitle] = useState("");
+  const [headlineSubtitle, setHeadlineSubtitle] = useState("");
+  const [partnerLogos, setPartnerLogos] = useState([]);
+  const [useCaseCards, setUseCaseCards] = useState([]);
+  const [industryCarouselTop, setIndustryCarouselTop] = useState([]);
+  const [industryCarouselBottom, setIndustryCarouselBottom] = useState([]);
+  const [productCards, setProductCards] = useState([]);
+
+  // Directus
+  const directus = new Directus(DIRECTUS_API_URL);
+  useEffect(() => {
+    directus.items('Headline').readByQuery({ meta: 'total_count' }).then(response => {
+      setHeadlineTitle(response.data[0].title);
+      setHeadlineSubtitle(response.data[0].subtitle);
+    });
+    directus.items('Partners_Logo').readByQuery({ meta: 'total_count' }).then(response => {
+      setPartnerLogos(response.data);
+    });
+    directus.items('Use_Case').readByQuery({ meta: 'total_count' }).then(response => {
+      setUseCaseCards(response.data);
+    });
+    directus.items('Industry_Carousel').readByQuery({ meta: 'total_count' }).then(response => {
+      setIndustryCarouselTop(response.data.slice(0, response.meta.total_count / 2));
+      setIndustryCarouselBottom(response.data.slice(response.meta.total_count / 2, response.meta.total_count));
+    });
+    directus.items('Use_Case').readByQuery({ meta: 'total_count' }).then(response => {
+      setUseCaseCards(response.data);
+    });
+    directus.items('Case_Study').readByQuery({ meta: 'total_count' }).then(response => {
+      setProductCards(response.data);
+    });  
+  }, []);
+
   // Map
   const mapCenter = {lon: 107.62799384411801, lat: -6.904165066892825};
   const map = useRef(null);
-
-  // Partner Logos
-  const partnerLogos = [logo1, logo2, logo3, logo1, logo3];
-
-  // Industry Carousel Data
-  // The format is cursed, sorry
-  const industryContentTop = ["Healthcare", "Transport and Logistics", "Defense", "Cities and Government", "Communication Tech", "Oil, Gas, and Mining"];
-  const industryImageTop = ["healthcare.json", "logistics.json", "defense.json", "city.json", "communication.json", "mining.json"];
-  const industryContentBottom = ["Engineering", "Commercial and Retail", "Tourism and Leisure", "Real Estate", "Task Force", "IoT Management"];
-  const industryImageBottom = ["engineering.json", "retail.json", "leisure.json", "real-estate.json", "task-force.json", "iot.json"];
 
   // Fetch Map Data
   async function fetchGraphQL(operationsDoc, operationName, variables) {
@@ -256,10 +280,9 @@ function App() {
         <div className="w-[45vw] h-[45vw] bg-blue opacity-10 rounded-full absolute blur-2xl -top-[15vw] -right-[10vw] z-0"/>
             <div className="w-[25vw] h-[25vw] bg-blue opacity-10 rounded-full absolute blur-2xl top-[15vw] -left-[10vw] z-0"/>
           <div className="w-full lg:w-[67%] 2xl:w-[50%] relative z-10">
-            
             <p className="mb-4">Braga Geodashboard</p>
-            <h1>Explore the city <br className="hidden md:block" />on a human scale</h1>
-            <p>Analyze existing site conditions, measure key urban indicators, and perform spatial analysis &mdash; directly in the browser.</p>
+            <h1>{headlineTitle}</h1>
+            <p>{headlineSubtitle}</p>
           </div>
           <div className="flex justify-start my-10 relative z-10">
             <button className="bg-black text-white mr-6 hover:bg-blue">Product Demo</button>
@@ -270,7 +293,7 @@ function App() {
           </div>
           <div className="flex justify-start items-center mt-3 mb-24">
             { partnerLogos.map((logo, index) => (
-              <img key={index} src={logo} alt={logo} className="h-full mr-6" />
+              <img key={index} src={DIRECTUS_API_URL + "/assets/" + logo.logo_url} alt={logo} className="h-full mr-6" />
             ))}
           </div>
         </section>
@@ -311,24 +334,22 @@ function App() {
           <FadeInSection className="py-12 px-[5%] 2xl:px-[10%] bg-black bg-opacity-10">
             <h2>Range of Industry</h2>
             <p>Morphocode Explorer helps planners, businesses, and cities do more with data.</p>
-            <IndustryCarousel content={industryContentTop} icons={industryImageTop} toRight={true} />
-            <IndustryCarousel content={industryContentBottom} icons={industryImageBottom} toRight={false} />
+            <IndustryCarousel content={industryCarouselTop} toRight={true} />
+            <IndustryCarousel content={industryCarouselBottom} toRight={false} />
           </FadeInSection>
           <div className="py-24">
             <FadeInSection className="px-[5%] 2xl:px-[10%]">
               <h2>Consumer Story</h2>
               <p>Innovative partners that surface insights with Braga Technologies</p>
               <div className="flex overflow-x-auto">
-                <UseCaseCard 
-                  no={1} 
-                  title="Accelerating Agricultural Sustainability" 
-                  desc="Disbun relies on Braga to turn complex geospatial information on agricultural trends into insights, supporting its mission to help farmers sustainably feed the planet." 
-                />
-                <UseCaseCard 
-                  no={2} 
-                  title="Mitigation Plan to Save Lives" 
-                  desc="Disbun relies on Braga to turn complex geospatial information on agricultural trends into insights, supporting its mission to help farmers sustainably feed the planet." 
-                />
+                { useCaseCards.map((card, index) => (
+                  <UseCaseCard 
+                    index={card.id}
+                    no={index+1} 
+                    title={card.title} 
+                    desc={card.description}
+                  />
+                ))}
               </div>
             </FadeInSection>
           </div>
@@ -342,18 +363,15 @@ function App() {
           </FadeInSection>
           <FadeInSection>
             <div className="flex flex-col md:flex-row w-full justify-start pt-3 overflow-x-hidden md:overflow-x-auto pb-24">
-              <ProductCard 
-                type="2D Geodashboard" 
-                title="BIG GeoDashboard" 
-                desc="Designed for task force management and POI data collection" 
-                image="https://wp.technologyreview.com/wp-content/uploads/2019/01/mapillary-2-12.jpg"
+              { productCards.map((card, index) => (
+                <ProductCard 
+                index={index}
+                type={card.type} 
+                title={card.title}
+                desc={card.desc}
+                image={DIRECTUS_API_URL + "/assets/" + card.image}
               />
-              <ProductCard 
-                type="2D Geodashboard" 
-                title="Disbun" 
-                desc="Designed for task force management and POI data collection" 
-                image="https://www.toronto.ca/wp-content/uploads/2017/10/9680-tomaps-870x338.png"
-              />
+              ))}
             </div>
           </FadeInSection>
         </section>
