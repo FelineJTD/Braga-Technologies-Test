@@ -8,8 +8,8 @@ function Navbar() {
         <img src={logo} alt="" className="w-4 h-4 self-start" />
         <p>GeoDashboard aaa</p>
         <p className="mx-6">|</p>
-        <a href="#" className="mr-6 un">Features</a>
-        <a href="#" className="un">Use Case</a>
+        <a href="/" className="mr-6 un">Features</a>
+        <a href="/" className="un">Use Case</a>
       </div>
       <div className="flex items-center md:hidden">
         <img src={logo} alt="" className="h-8" />
