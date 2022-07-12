@@ -348,6 +348,7 @@ function App() {
                     no={index+1} 
                     title={card.title} 
                     desc={card.description}
+                    link="/"
                   />
                 ))}
               </div>
