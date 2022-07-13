@@ -344,7 +344,7 @@ function App() {
               <div className="flex overflow-x-auto">
                 { useCaseCards.map((card, index) => (
                   <UseCaseCard 
-                    index={card.id}
+                    key={index}
                     no={index+1} 
                     title={card.title} 
                     desc={card.description}

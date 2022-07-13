@@ -1,7 +1,7 @@
 // Fade when scrolled: https://dev.to/selbekk/how-to-fade-in-content-as-it-scrolls-into-view-10j4
 // with modifications
 
-import React from "react";
+// import React from "react";
 import { useEffect, useRef, useState } from "react";
 import "./FadeInSection.css";
 
